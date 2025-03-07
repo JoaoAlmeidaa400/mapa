@@ -121,9 +121,20 @@
     // Carregar o PDF de teste
     renderPDF(pdfUrl);
 
-    // Adicionando um marcador para um posto de trabalho, por exemplo
+    // Defina a URL da sua imagem de ícone
+    var iconUrl = 'https://example.com/your-custom-icon.png';  // Substitua pelo caminho da sua imagem
+
+    // Crie um ícone personalizado
+    var customIcon = L.icon({
+        iconUrl: iconUrl,  // Caminho para a imagem do ícone
+        iconSize: [32, 32],  // Tamanho do ícone
+        iconAnchor: [16, 32],  // Posição do ponto de ancoragem (ponto onde o marcador "fica" no mapa)
+        popupAnchor: [0, -32]  // Distância entre o marcador e o popup
+    });
+
+    // Adicionar o marcador com o ícone personalizado
     var postoDeTrabalho = [500, 500]; // Coordenadas dentro do PDF
-    L.marker(postoDeTrabalho).addTo(map)
+    L.marker(postoDeTrabalho, { icon: customIcon }).addTo(map)
         .bindPopup('Posto de Trabalho 1')
         .openPopup();
 
