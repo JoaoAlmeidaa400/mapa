@@ -124,10 +124,10 @@
     // Defina a URL da sua imagem de ícone
     var iconUrl = 'desktop.png';  // Substitua pelo caminho da sua imagem
 
-    // Crie um ícone personalizado
+    // Crie um ícone personalizado com um tamanho fixo
     var customIcon = L.icon({
         iconUrl: iconUrl,  // Caminho para a imagem do ícone
-        iconSize: [10, 10],  // Tamanho do ícone
+        iconSize: [32, 32],  // Tamanho fixo do ícone, que não será alterado pelo zoom
         iconAnchor: [16, 32],  // Posição do ponto de ancoragem (ponto onde o marcador "fica" no mapa)
         popupAnchor: [0, -32]  // Distância entre o marcador e o popup
     });
@@ -146,4 +146,3 @@
 
 </body>
 </html>
-
