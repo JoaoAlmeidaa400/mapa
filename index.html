@@ -63,7 +63,7 @@
             pdf.getPage(1).then(function(page) {
                 console.log('Página 1 do PDF carregada com sucesso');  // Verifique se a página foi carregada
 
-                var scale = 0.5;  // Ajuste a escala aqui
+                var scale = 1.0;  // Ajuste a escala aqui
                 var viewport = page.getViewport({ scale: scale });
 
                 canvas.height = viewport.height;
@@ -79,7 +79,7 @@
                     var bounds = [[0, 0], [canvas.height, canvas.width]];
                     var imageOverlay = L.imageOverlay(canvas.toDataURL(), bounds).addTo(map);
                     map.fitBounds(bounds);  // Ajusta a visualização do mapa ao PDF
-                    map.setZoom(1);  // Ajusta o nível de zoom para a visualização do PDF
+                    map.setZoom(0);  // Definindo o zoom inicial para um valor mais afastado (zoom 0)
                     console.log('Mapa ajustado com sucesso');
                 }).catch(function(error) {
                     console.error('Erro ao renderizar a página:', error);
