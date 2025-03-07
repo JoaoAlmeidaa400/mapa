@@ -8,9 +8,10 @@
     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
     crossorigin=""/>
     <style>
+        /* Faz o mapa ocupar toda a altura da tela */
         #map {
-            height: 600px;
-            width: 100%;
+            height: 100vh;  /* 100% da altura da tela */
+            width: 100%;    /* 100% da largura da tela */
         }
         canvas {
             position: absolute;
@@ -91,6 +92,11 @@
     L.marker(postoDeTrabalho).addTo(map)
         .bindPopup('Posto de Trabalho 1')
         .openPopup();
+
+    // Adicionando o redimensionamento do mapa quando a janela é alterada
+    window.addEventListener('resize', function() {
+        map.invalidateSize();
+    });
 </script>
 
 </body>
