@@ -49,6 +49,7 @@
 
     // URL de um PDF de exemplo
     var pdfUrl = 'DistribEquipamentos_Atual-Model.pdf';  // PDF de teste
+    var imageOverlay;
 
     function renderPDF(pdfUrl) {
         var canvas = document.createElement('canvas');
@@ -57,11 +58,11 @@
         // Carregar o PDF
         console.log('Tentando carregar o PDF...');
         pdfjsLib.getDocument(pdfUrl).promise.then(function(pdf) {
-            console.log('PDF carregado com sucesso');  // Verifique se o PDF foi carregado
-            console.log('Número total de páginas:', pdf.numPages); // Log do número total de páginas
+            console.log('PDF carregado com sucesso');
+            console.log('Número total de páginas:', pdf.numPages); 
 
             pdf.getPage(1).then(function(page) {
-                console.log('Página 1 do PDF carregada com sucesso');  // Verifique se a página foi carregada
+                console.log('Página 1 do PDF carregada com sucesso');
 
                 var scale = 1.0;  // Ajuste a escala aqui
                 var viewport = page.getViewport({ scale: scale });
@@ -74,13 +75,38 @@
                     canvasContext: ctx,
                     viewport: viewport
                 }).promise.then(function() {
-                    console.log('Página renderizada com sucesso');  // Verifique se a renderização foi bem-sucedida
+                    console.log('Página renderizada com sucesso');
 
                     var bounds = [[0, 0], [canvas.height, canvas.width]];
-                    var imageOverlay = L.imageOverlay(canvas.toDataURL(), bounds).addTo(map);
+
+                    // Cria a sobreposição da imagem do PDF
+                    if (imageOverlay) {
+                        map.removeLayer(imageOverlay);  // Remove a camada anterior, se houver
+                    }
+
+                    imageOverlay = L.imageOverlay(canvas.toDataURL(), bounds).addTo(map);
                     map.fitBounds(bounds);  // Ajusta a visualização do mapa ao PDF
-                    map.setZoom(-1);  // Definindo o zoom inicial para um valor ainda mais afastado (-1)
-                    console.log('Mapa ajustado com sucesso');
+
+                    // Ajusta a qualidade de zoom conforme o nível de zoom
+                    map.on('zoom', function() {
+                        var currentZoom = map.getZoom();
+                        var newScale = Math.pow(2, currentZoom);  // Ajusta a escala com base no nível de zoom
+                        var newViewport = page.getViewport({ scale: newScale });
+
+                        canvas.height = newViewport.height;
+                        canvas.width = newViewport.width;
+
+                        // Renderiza novamente a página do PDF com o novo zoom
+                        page.render({
+                            canvasContext: ctx,
+                            viewport: newViewport
+                        }).promise.then(function() {
+                            imageOverlay.setUrl(canvas.toDataURL());
+                        });
+                    });
+
+                    map.setZoom(0);  // Ajusta o zoom inicial
+
                 }).catch(function(error) {
                     console.error('Erro ao renderizar a página:', error);
                 });
