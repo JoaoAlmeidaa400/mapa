@@ -140,13 +140,21 @@
 
     // Adicionar o marcador com o ícone fixo
     var postoDeTrabalho = [500, 500]; // Coordenadas dentro do PDF
-    L.marker(postoDeTrabalho, { icon: fixedIcon }).addTo(map)
+    L.marker(postoDeTrabalho, { icon: fixedIcon, interactive: false }).addTo(map)
         .bindPopup('Posto de Trabalho 1')
         .openPopup();
 
     // Adicionando o redimensionamento do mapa quando a janela é alterada
     window.addEventListener('resize', function() {
         map.invalidateSize();
+    });
+
+    // Garantir que o marcador não se mova com o zoom
+    map.on('zoomend', function() {
+        var zoom = map.getZoom();
+        var currentLatLng = map.containerPointToLatLng(postoDeTrabalho);
+        var newLatLng = map.latLngToContainerPoint(currentLatLng);
+        L.marker(newLatLng, { icon: fixedIcon }).addTo(map);
     });
 </script>
 
