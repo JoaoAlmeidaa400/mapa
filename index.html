@@ -25,6 +25,15 @@
             top: 0;
             left: 0;
         }
+
+        /* Estilo do ícone fixo */
+        .fixed-icon {
+            width: 32px;
+            height: 32px;
+            background-image: url('desktop.png'); /* Substitua pelo caminho da sua imagem */
+            background-size: cover;
+            position: relative;
+        }
     </style>
 </head>
 <body>
@@ -121,20 +130,17 @@
     // Carregar o PDF de teste
     renderPDF(pdfUrl);
 
-    // Defina a URL da sua imagem de ícone
-    var iconUrl = 'desktop.png';  // Substitua pelo caminho da sua imagem
-
-    // Crie um ícone personalizado com um tamanho fixo
-    var customIcon = L.icon({
-        iconUrl: iconUrl,  // Caminho para a imagem do ícone
-        iconSize: [32, 32],  // Tamanho fixo do ícone, que não será alterado pelo zoom
-        iconAnchor: [-750, 200],  // Posição do ponto de ancoragem (ponto onde o marcador "fica" no mapa)
-        popupAnchor: [0, -32]  // Distância entre o marcador e o popup
+    // Criar um ícone fixo usando L.divIcon
+    var fixedIcon = L.divIcon({
+        className: 'fixed-icon',  // Classe CSS definida acima
+        iconSize: [32, 32],       // Tamanho fixo do ícone
+        iconAnchor: [16, 32],     // Posição do ponto de ancoragem
+        popupAnchor: [0, -32]     // Distância entre o marcador e o popup
     });
 
-    // Adicionar o marcador com o ícone personalizado
+    // Adicionar o marcador com o ícone fixo
     var postoDeTrabalho = [500, 500]; // Coordenadas dentro do PDF
-    L.marker(postoDeTrabalho, { icon: customIcon }).addTo(map)
+    L.marker(postoDeTrabalho, { icon: fixedIcon }).addTo(map)
         .bindPopup('Posto de Trabalho 1')
         .openPopup();
 
