@@ -5,64 +5,76 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mapa 3D Interativo</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://unpkg.com/three.interaction.js@0.2.3/three.interaction.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
     <style>
         body, html { margin: 0; padding: 0; overflow: hidden; }
         #map { width: 100vw; height: 100vh; }
+        canvas { position: absolute; top: 0; left: 0; pointer-events: none; }
     </style>
 </head>
 <body>
     <div id="map"></div>
 
     <script>
-        // Inicializar o mapa Leaflet
-        var map = L.map('map').setView([38.7169, -9.1399], 15); // Lisboa como exemplo
-
+        // 1️⃣ Criar o mapa Leaflet
+        var map = L.map('map').setView([38.7169, -9.1399], 17); // Lisboa
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
-        // Criar a cena Three.js
+        // 2️⃣ Criar a cena Three.js
         var renderer = new THREE.WebGLRenderer({ alpha: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
         var scene = new THREE.Scene();
         var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.set(0, -5, 5); 
+        camera.position.set(0, -10, 10);
         camera.lookAt(0, 0, 0);
 
-        // Adicionar luz
         var light = new THREE.DirectionalLight(0xffffff, 1);
-        light.position.set(5, 5, 5).normalize();
+        light.position.set(10, 10, 10).normalize();
         scene.add(light);
 
-        // Função para criar edifícios
-        function criarEdificio(x, y, largura, altura, cor) {
+        // 3️⃣ Converter coordenadas Leaflet para Three.js
+        function latLngToScene(lat, lng) {
+            var point = map.latLngToContainerPoint([lat, lng]);
+            var x = (point.x / window.innerWidth) * 2 - 1;
+            var y = -(point.y / window.innerHeight) * 2 + 1;
+            return { x: x * 5, y: y * 5 }; // Ajuste de escala
+        }
+
+        // 4️⃣ Criar edifícios 3D no código
+        function criarEdificio(lat, lng, largura, altura, cor) {
+            var coords = latLngToScene(lat, lng);
             var geometria = new THREE.BoxGeometry(largura, altura, largura);
             var material = new THREE.MeshStandardMaterial({ color: cor });
             var edificio = new THREE.Mesh(geometria, material);
-            edificio.position.set(x, y, altura / 2);
+            edificio.position.set(coords.x, coords.y, altura / 2);
             scene.add(edificio);
         }
 
-        // Adicionar edifícios ao mapa
-        criarEdificio(0, 0, 1, 2, 0x3333ff); // Edifício azul
-        criarEdificio(2, 1, 1.5, 3, 0xff3333); // Edifício vermelho
-        criarEdificio(-2, -1, 2, 4, 0x33ff33); // Edifício verde
+        // 5️⃣ Adicionar alguns edifícios em pontos do mapa
+        criarEdificio(38.7169, -9.1395, 2, 5, 0xff0000); // Vermelho
+        criarEdificio(38.7165, -9.1398, 3, 6, 0x0000ff); // Azul
+        criarEdificio(38.7170, -9.1400, 1.5, 4, 0x00ff00); // Verde
 
+        // 6️⃣ Animação para renderizar a cena
         function animate() {
             requestAnimationFrame(animate);
             renderer.render(scene, camera);
         }
         animate();
 
+        // 7️⃣ Ajustar tamanho da tela ao redimensionar
         window.addEventListener('resize', function () {
             renderer.setSize(window.innerWidth, window.innerHeight);
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
         });
+
     </script>
 </body>
 </html>
