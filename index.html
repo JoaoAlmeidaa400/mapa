@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mapa 3D Interativo</title>
+    <title>Mapa 3D com Leaflet e Three.js</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://unpkg.com/three.interaction.js@0.2.3/three.interaction.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
     <style>
         body, html { margin: 0; padding: 0; overflow: hidden; }
-        #map { width: 100vw; height: 100vh; }
+        #map { width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; }
         canvas { position: absolute; top: 0; left: 0; pointer-events: none; }
     </style>
 </head>
@@ -18,13 +18,13 @@
     <div id="map"></div>
 
     <script>
-        // 1️⃣ Criar o mapa Leaflet
+        // Criar o mapa Leaflet
         var map = L.map('map').setView([38.7169, -9.1399], 17); // Lisboa
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
-        // 2️⃣ Criar a cena Three.js
+        // Criar cena Three.js
         var renderer = new THREE.WebGLRenderer({ alpha: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
@@ -38,15 +38,15 @@
         light.position.set(10, 10, 10).normalize();
         scene.add(light);
 
-        // 3️⃣ Converter coordenadas Leaflet para Three.js
+        // Converter coordenadas Leaflet para Three.js corretamente
         function latLngToScene(lat, lng) {
-            var point = map.latLngToContainerPoint([lat, lng]);
-            var x = (point.x / window.innerWidth) * 2 - 1;
-            var y = -(point.y / window.innerHeight) * 2 + 1;
-            return { x: x * 5, y: y * 5 }; // Ajuste de escala
+            var proj = map.latLngToContainerPoint([lat, lng]);
+            var x = (proj.x / window.innerWidth) * 2 - 1;
+            var y = -(proj.y / window.innerHeight) * 2 + 1;
+            return { x: x * 10, y: y * 10 }; // Ajustando a escala
         }
 
-        // 4️⃣ Criar edifícios 3D no código
+        // Criar edifícios em coordenadas específicas
         function criarEdificio(lat, lng, largura, altura, cor) {
             var coords = latLngToScene(lat, lng);
             var geometria = new THREE.BoxGeometry(largura, altura, largura);
@@ -56,19 +56,19 @@
             scene.add(edificio);
         }
 
-        // 5️⃣ Adicionar alguns edifícios em pontos do mapa
+        // Adicionar edifícios ao mapa
         criarEdificio(38.7169, -9.1395, 2, 5, 0xff0000); // Vermelho
         criarEdificio(38.7165, -9.1398, 3, 6, 0x0000ff); // Azul
         criarEdificio(38.7170, -9.1400, 1.5, 4, 0x00ff00); // Verde
 
-        // 6️⃣ Animação para renderizar a cena
+        // Animação para renderizar a cena corretamente
         function animate() {
             requestAnimationFrame(animate);
             renderer.render(scene, camera);
         }
         animate();
 
-        // 7️⃣ Ajustar tamanho da tela ao redimensionar
+        // Ajustar tamanho ao redimensionar
         window.addEventListener('resize', function () {
             renderer.setSize(window.innerWidth, window.innerHeight);
             camera.aspect = window.innerWidth / window.innerHeight;
