@@ -32,45 +32,56 @@
         document.body.appendChild(renderer.domElement);
 
         var scene = new THREE.Scene();
-        var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.set(0, 0, 300);
+        var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
+        camera.position.set(0, 0, 500);
 
         var light = new THREE.DirectionalLight(0xffffff, 1);
         light.position.set(0, 0, 500).normalize();
         scene.add(light);
 
-        // Sincronizar Three.js com Leaflet
-        function updateScene() {
-            var center = map.getCenter();
-            camera.position.x = center.lat;
-            camera.position.y = center.lng;
-            renderer.render(scene, camera);
+        var objects = [];
+
+        function latLngToThree(latlng) {
+            var point = map.latLngToLayerPoint(latlng);
+            return new THREE.Vector3(point.x - window.innerWidth / 2, -point.y + window.innerHeight / 2, 0);
         }
 
-        map.on('move', updateScene);
-        
-        // Criar zonas 3D baseadas em coordenadas do mapa
+        function add3DZone(coords, altura, cor) {
+            var shape = new THREE.Shape();
+            coords.forEach((point, index) => {
+                var converted = latLngToThree(L.latLng(point[0], point[1]));
+                if (index === 0) {
+                    shape.moveTo(converted.x, converted.y);
+                } else {
+                    shape.lineTo(converted.x, converted.y);
+                }
+            });
+            
+            var extrudeSettings = { depth: altura, bevelEnabled: false }; 
+            var geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+            var material = new THREE.MeshStandardMaterial({ color: cor });
+            var mesh = new THREE.Mesh(geometry, material);
+            scene.add(mesh);
+            objects.push(mesh);
+        }
+
         var zonas3D = [
             { coords: [[200, 200], [300, 200], [300, 300], [200, 300]], altura: 50, cor: 0xff0000 },
             { coords: [[500, 500], [600, 500], [600, 600], [500, 600]], altura: 70, cor: 0x0000ff }
         ];
 
-        zonas3D.forEach(zona => {
-            var shape = new THREE.Shape();
-            zona.coords.forEach((point, index) => {
-                if (index === 0) {
-                    shape.moveTo(point[0], point[1]);
-                } else {
-                    shape.lineTo(point[0], point[1]);
-                }
+        zonas3D.forEach(zona => add3DZone(zona.coords, zona.altura, zona.cor));
+
+        function updateScene() {
+            objects.forEach((obj, i) => {
+                var newPosition = latLngToThree(L.latLng(zonas3D[i].coords[0][0], zonas3D[i].coords[0][1]));
+                obj.position.x = newPosition.x;
+                obj.position.y = newPosition.y;
             });
-            
-            var extrudeSettings = { depth: zona.altura, bevelEnabled: false };
-            var geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
-            var material = new THREE.MeshStandardMaterial({ color: zona.cor });
-            var mesh = new THREE.Mesh(geometry, material);
-            scene.add(mesh);
-        });
+            renderer.render(scene, camera);
+        }
+
+        map.on('move', updateScene);
 
         function animate() {
             requestAnimationFrame(animate);
