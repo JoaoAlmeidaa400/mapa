@@ -28,8 +28,8 @@
         controls.enableZoom = true;
         controls.maxPolarAngle = Math.PI / 2; // Impede de mover abaixo da base
 
-        // Criar base cinza (aumentada)
-        const baseGeometry = new THREE.BoxGeometry(15, 1, 15);
+        // Criar base cinza (muito maior)
+        const baseGeometry = new THREE.BoxGeometry(50, 1, 50); // Base bem maior
         const baseMaterial = new THREE.MeshStandardMaterial({ color: 0x888888 });
         const base = new THREE.Mesh(baseGeometry, baseMaterial);
         base.position.y = -0.5;
@@ -58,16 +58,16 @@
         const ambientLight = new THREE.AmbientLight(0x404040);
         scene.add(ambientLight);
 
-        // Posição inicial da câmara (de cima para baixo)
-        camera.position.set(0, 20, 0); 
+        // Posição inicial da câmara (mais afastada para ver melhor)
+        camera.position.set(0, 50, 0); // Mais alto para um zoom mais afastado
         camera.lookAt(0, 0, 0);
-        controls.target.set(0, 0, 0); 
+        controls.target.set(0, 0, 0);
         controls.update();
 
         // Função de animação
         function animate() {
             requestAnimationFrame(animate);
-            controls.update(); 
+            controls.update();
             renderer.render(scene, camera);
         }
         animate();
