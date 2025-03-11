@@ -3,51 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mapa Interativo 3D</title>
+    <title>Mapa 3D Interativo</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three/examples/js/controls/OrbitControls.js"></script>
     <style>
         body { margin: 0; overflow: hidden; }
         canvas { display: block; }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
     <script>
-        // Configuração da cena
+        // Configuração inicial da cena
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer();
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
-        // Criar um cubo
+        // Criar o cubo base do mapa
         const geometry = new THREE.BoxGeometry(5, 1, 5);
-        const material = new THREE.MeshBasicMaterial({ color: 0x0077ff, wireframe: true });
-        const cube = new THREE.Mesh(geometry, material);
-        scene.add(cube);
+        const material = new THREE.MeshStandardMaterial({ color: 0xaaaaaa });
+        const base = new THREE.Mesh(geometry, material);
+        scene.add(base);
 
-        // Posicionar a câmera
-        camera.position.z = 5;
-        camera.position.y = 3;
-        camera.lookAt(cube.position);
+        // Criar edifícios no mapa (cubos adicionais)
+        function criarEdificio(x, z, altura, cor) {
+            const geom = new THREE.BoxGeometry(1, altura, 1);
+            const mat = new THREE.MeshStandardMaterial({ color: cor });
+            const edificio = new THREE.Mesh(geom, mat);
+            edificio.position.set(x, altura / 2 + 0.5, z);
+            scene.add(edificio);
+        }
 
-        // Adicionar luz ambiente
-        const light = new THREE.AmbientLight(0xffffff); 
-        scene.add(light);
+        // Adicionar edifícios
+        criarEdificio(-1.5, -1.5, 3, 0x3366ff);
+        criarEdificio(1.5, -1.5, 2, 0xff3366);
+        criarEdificio(-1.5, 1.5, 4, 0x33ff66);
+        criarEdificio(1.5, 1.5, 3.5, 0xffff33);
+
+        // Luzes
+        const luzAmbiente = new THREE.AmbientLight(0xffffff, 0.6);
+        scene.add(luzAmbiente);
+        const luzDirecional = new THREE.DirectionalLight(0xffffff, 0.8);
+        luzDirecional.position.set(5, 10, 5);
+        scene.add(luzDirecional);
+
+        // Controles do rato para mover a câmera
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.rotateSpeed = 0.5;
+        
+        // Posição inicial da câmera
+        camera.position.set(5, 5, 10);
+        controls.update();
 
         // Função de animação
         function animate() {
             requestAnimationFrame(animate);
-            cube.rotation.y += 0.01;
+            controls.update();
             renderer.render(scene, camera);
         }
         animate();
-
-        // Ajustar renderizador ao redimensionar a janela
-        window.addEventListener('resize', () => {
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-        });
     </script>
 </body>
 </html>
