@@ -3,152 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mapa Interno da Empresa - PDF</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-    crossorigin=""/>
+    <title>Mapa 3D da Empresa</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
     <style>
-        /* Faz o mapa ocupar toda a altura e largura da tela */
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-        }
-
-        #map {
-            height: 100%;
-            width: 100%;
-        }
-
-        canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-
-        /* Estilo do ícone fixo */
-        .fixed-icon {
-            width: 32px;
-            height: 32px;
-            background-image: url('desktop.png'); /* Substitua pelo caminho da sua imagem */
-            background-size: cover;
-            position: relative;
-        }
+        body, html { margin: 0; padding: 0; height: 100%; }
+        #map { height: 100%; width: 100%; }
     </style>
 </head>
 <body>
-
-<!-- O mapa será renderizado aqui -->
-<div id="map"></div>
-
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" 
-    crossorigin=""></script>
-
-<!-- PDF.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
-
-<script>
-    var map = L.map('map', {
-        crs: L.CRS.Simple, // Usando o sistema de coordenadas simples
-        minZoom: -2,  // Ajustado para zoom inicial mais afastado
-        maxZoom: 3, // Definir o nível máximo de zoom para evitar zoom excessivo
-        zoomControl: false  // Desativa o controle de zoom
-    });
-
-    // URL de um PDF de exemplo
-    var pdfUrl = 'DistribEquipamentos_Atual-Model.pdf';  // PDF de teste
-    var imageOverlay;
-
-    function renderPDF(pdfUrl) {
-        var canvas = document.createElement('canvas');
-        var ctx = canvas.getContext('2d');
-
-        // Carregar o PDF
-        console.log('Tentando carregar o PDF...');
-        pdfjsLib.getDocument(pdfUrl).promise.then(function(pdf) {
-            console.log('PDF carregado com sucesso');
-            console.log('Número total de páginas:', pdf.numPages); 
-
-            pdf.getPage(1).then(function(page) {
-                console.log('Página 1 do PDF carregada com sucesso');
-
-                var scale = 1.0;  // Ajuste a escala aqui
-                var viewport = page.getViewport({ scale: scale });
-
-                canvas.height = viewport.height;
-                canvas.width = viewport.width;
-
-                // Renderiza a página do PDF no canvas
-                page.render({
-                    canvasContext: ctx,
-                    viewport: viewport
-                }).promise.then(function() {
-                    console.log('Página renderizada com sucesso');
-
-                    var bounds = [[0, 0], [canvas.height, canvas.width]];
-
-                    // Cria a sobreposição da imagem do PDF
-                    if (imageOverlay) {
-                        map.removeLayer(imageOverlay);  // Remove a camada anterior, se houver
-                    }
-
-                    imageOverlay = L.imageOverlay(canvas.toDataURL(), bounds).addTo(map);
-                    map.fitBounds(bounds);  // Ajusta a visualização do mapa ao PDF
-
-                    // Ajusta a qualidade de zoom conforme o nível de zoom
-                    map.on('zoom', function() {
-                        var currentZoom = map.getZoom();
-                        var newScale = Math.pow(2, currentZoom);  // Ajusta a escala com base no nível de zoom
-                        var newViewport = page.getViewport({ scale: newScale });
-
-                        canvas.height = newViewport.height;
-                        canvas.width = newViewport.width;
-
-                        // Renderiza novamente a página do PDF com o novo zoom
-                        page.render({
-                            canvasContext: ctx,
-                            viewport: newViewport
-                        }).promise.then(function() {
-                            imageOverlay.setUrl(canvas.toDataURL());
-                        });
-                    });
-
-                    map.setZoom(0);  // Ajusta o zoom inicial
-
-                }).catch(function(error) {
-                    console.error('Erro ao renderizar a página:', error);
-                });
-            }).catch(function(error) {
-                console.error('Erro ao carregar a página do PDF:', error);
-            });
-        }).catch(function(error) {
-            console.error('Erro ao carregar o PDF:', error);
+    <div id="map"></div>
+    
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    <script>
+        // Criar o mapa Leaflet com coordenadas simples
+        var map = L.map('map', {
+            crs: L.CRS.Simple,
+            minZoom: -1,
+            maxZoom: 3
         });
-    }
 
-    // Carregar o PDF de teste
-    renderPDF(pdfUrl);
+        // Definir os limites do mapa
+        var bounds = [[0, 0], [1000, 1000]];
+        map.fitBounds(bounds);
 
-    // Criar um ícone fixo usando L.divIcon
-    var fixedIcon = L.divIcon({
-        className: 'fixed-icon',  // Classe CSS definida acima
-        iconSize: [10, 10],       // Tamanho fixo do ícone
-        iconAnchor: [16, 32],     // Posição do ponto de ancoragem
-        popupAnchor: [0, -32]     // Distância entre o marcador e o popup
-    });
+        // Exemplo de zonas com extrusão 3D
+        var zonas3D = [
+            { coords: [[200, 200], [300, 200], [300, 300], [200, 300]], altura: 50, cor: 'red' },
+            { coords: [[500, 500], [600, 500], [600, 600], [500, 600]], altura: 70, cor: 'blue' }
+        ];
 
-    // Adicionar o marcador com o ícone fixo
-    var postoDeTrabalho = [500, 500]; // Coordenadas dentro do PDF
-    L.marker(postoDeTrabalho, { icon: fixedIcon, interactive: false }).addTo(map)
-        .bindPopup('Posto de Trabalho 1')
-        .openPopup();
-
-    // Adicionando o redimensionamento do mapa quando a janela é alterada
-    window.addEventListener('resize', function() {
-        map.invalidateSize();
-    });
-</script>
-
+        // Adicionar as zonas ao mapa
+        zonas3D.forEach(zona => {
+            var layer = L.polygon(zona.coords, {
+                color: '#000',
+                fillColor: zona.cor,
+                fillOpacity: 0.6
+            }).addTo(map);
+            
+            // Adicionar efeito de hover
+            layer.on('mouseover', function() {
+                this.setStyle({ fillOpacity: 1 });
+            });
+            layer.on('mouseout', function() {
+                this.setStyle({ fillOpacity: 0.6 });
+            });
+            
+            layer.bindPopup(`Zona com altura: ${zona.altura} unidades`);
+        });
+    </script>
 </body>
 </html>
