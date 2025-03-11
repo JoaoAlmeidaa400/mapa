@@ -20,24 +20,24 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
-        // Controles de órbita (para mover com o rato)
+        // Controles de órbita
         const controls = new THREE.OrbitControls(camera, renderer.domElement);
         controls.enableDamping = true;
         controls.dampingFactor = 0.05;
         controls.rotateSpeed = 0.5;
         controls.enableZoom = true;
-        controls.maxPolarAngle = Math.PI / 2; // Impede de mover abaixo da base
+        controls.maxPolarAngle = Math.PI / 2;
 
-        // Criar base cinza (grande)
+        // Criar base cinza maior
         const baseGeometry = new THREE.BoxGeometry(50, 1, 50);
         const baseMaterial = new THREE.MeshStandardMaterial({ color: 0x888888 });
         const base = new THREE.Mesh(baseGeometry, baseMaterial);
         base.position.y = -0.5;
         scene.add(base);
 
-        // Criar o "cubo azul" com formato personalizado
+        // Criar a parte direita (com cortes diagonais)
         const shape = new THREE.Shape();
-        shape.moveTo(-5, 0);
+        shape.moveTo(0, 0);
         shape.lineTo(5, 0);
         shape.lineTo(5, 10);
         shape.lineTo(3, 9);
@@ -50,16 +50,22 @@
         shape.lineTo(5, 2);
         shape.lineTo(3, 1);
         shape.lineTo(3, 0);
-        shape.lineTo(-5, 0);
+        shape.lineTo(0, 0);
 
         const extrudeSettings = { depth: 2, bevelEnabled: false };
-        const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
-        const material = new THREE.MeshStandardMaterial({ color: 0x0000ff });
-        const cuboAzul = new THREE.Mesh(geometry, material);
-        cuboAzul.rotation.x = -Math.PI / 2;
-        cuboAzul.position.set(-10, 0.5, 0);
+        const geometryDireita = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+        const materialAzul = new THREE.MeshStandardMaterial({ color: 0x0000ff });
 
-        scene.add(cuboAzul);
+        const parteDireita = new THREE.Mesh(geometryDireita, materialAzul);
+        parteDireita.rotation.x = -Math.PI / 2;
+        parteDireita.position.set(0, 0.5, 0);
+        scene.add(parteDireita);
+
+        // Criar o retângulo azul liso
+        const rectGeometry = new THREE.BoxGeometry(5, 10, 2);
+        const rectangulo = new THREE.Mesh(rectGeometry, materialAzul);
+        rectangulo.position.set(-2.5, 5, 1); // Alinha ao lado esquerdo
+        scene.add(rectangulo);
 
         // Luzes
         const light = new THREE.DirectionalLight(0xffffff, 1);
@@ -70,12 +76,12 @@
         scene.add(ambientLight);
 
         // Posição inicial da câmara
-        camera.position.set(0, 50, 0);
+        camera.position.set(0, 50, 20);
         camera.lookAt(0, 0, 0);
         controls.target.set(0, 0, 0);
         controls.update();
 
-        // Função de animação
+        // Animação
         function animate() {
             requestAnimationFrame(animate);
             controls.update();
