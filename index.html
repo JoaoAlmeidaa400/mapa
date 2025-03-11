@@ -1,53 +1,68 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mapa 3D da Empresa</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+    <title>Mapa 3D Interativo</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
     <style>
-        body, html { margin: 0; padding: 0; height: 100%; }
-        #map { height: 100%; width: 100%; position: absolute; top: 0; left: 0; }
-        canvas { position: absolute; top: 0; left: 0; pointer-events: none; }
+        body, html { margin: 0; padding: 0; overflow: hidden; }
+        #map { width: 100vw; height: 100vh; }
     </style>
 </head>
 <body>
     <div id="map"></div>
-    
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
     <script>
-        var map = L.map('map').setView([0, 0], 2);
-        
+        // Inicializar o mapa Leaflet
+        var map = L.map('map').setView([38.7169, -9.1399], 15); // Lisboa como exemplo
+
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
-        var threeLayer = L.DomUtil.create('div', 'three-container', map.getContainer());
+        // Criar a cena Three.js
         var renderer = new THREE.WebGLRenderer({ alpha: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
-        threeLayer.appendChild(renderer.domElement);
+        document.body.appendChild(renderer.domElement);
 
         var scene = new THREE.Scene();
         var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.z = 5;
+        camera.position.set(0, -5, 5); 
+        camera.lookAt(0, 0, 0);
 
+        // Adicionar luz
         var light = new THREE.DirectionalLight(0xffffff, 1);
-        light.position.set(1, 1, 1).normalize();
+        light.position.set(5, 5, 5).normalize();
         scene.add(light);
 
-        // Criando uma "casa" 3D
-        var geometry = new THREE.BoxGeometry(1, 1, 1);
-        var material = new THREE.MeshStandardMaterial({ color: 0xff0000 });
-        var house = new THREE.Mesh(geometry, material);
-        house.position.set(0, 0, 0);
-        scene.add(house);
+        // Função para criar edifícios
+        function criarEdificio(x, y, largura, altura, cor) {
+            var geometria = new THREE.BoxGeometry(largura, altura, largura);
+            var material = new THREE.MeshStandardMaterial({ color: cor });
+            var edificio = new THREE.Mesh(geometria, material);
+            edificio.position.set(x, y, altura / 2);
+            scene.add(edificio);
+        }
+
+        // Adicionar edifícios ao mapa
+        criarEdificio(0, 0, 1, 2, 0x3333ff); // Edifício azul
+        criarEdificio(2, 1, 1.5, 3, 0xff3333); // Edifício vermelho
+        criarEdificio(-2, -1, 2, 4, 0x33ff33); // Edifício verde
 
         function animate() {
             requestAnimationFrame(animate);
             renderer.render(scene, camera);
         }
         animate();
+
+        window.addEventListener('resize', function () {
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+        });
     </script>
 </body>
 </html>
