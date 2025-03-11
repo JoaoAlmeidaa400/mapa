@@ -22,10 +22,11 @@
 
         // Controles de órbita (para mover com o rato)
         const controls = new THREE.OrbitControls(camera, renderer.domElement);
-        controls.enableDamping = true; 
+        controls.enableDamping = true;
         controls.dampingFactor = 0.05;
         controls.rotateSpeed = 0.5;
         controls.enableZoom = true;
+        controls.maxPolarAngle = Math.PI / 2; // Impede de mover abaixo da base
 
         // Criar base cinza (aumentada)
         const baseGeometry = new THREE.BoxGeometry(15, 1, 15);
@@ -57,9 +58,11 @@
         const ambientLight = new THREE.AmbientLight(0x404040);
         scene.add(ambientLight);
 
-        // Posição inicial da câmara
-        camera.position.set(10, 10, 10);
+        // Posição inicial da câmara (de cima para baixo)
+        camera.position.set(0, 20, 0); 
         camera.lookAt(0, 0, 0);
+        controls.target.set(0, 0, 0); 
+        controls.update();
 
         // Função de animação
         function animate() {
