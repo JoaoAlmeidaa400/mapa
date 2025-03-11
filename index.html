@@ -10,8 +10,8 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
     <style>
         body, html { margin: 0; padding: 0; overflow: hidden; }
-        #map { width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; }
-        canvas { position: absolute; top: 0; left: 0; pointer-events: none; }
+        #map { width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; z-index: 0; }
+        canvas { position: absolute; top: 0; left: 0; pointer-events: none; z-index: 1; }
     </style>
 </head>
 <body>
@@ -27,6 +27,9 @@
         // Criar cena Three.js
         var renderer = new THREE.WebGLRenderer({ alpha: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.domElement.style.position = "absolute";
+        renderer.domElement.style.top = "0";
+        renderer.domElement.style.left = "0";
         document.body.appendChild(renderer.domElement);
 
         var scene = new THREE.Scene();
