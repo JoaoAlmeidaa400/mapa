@@ -28,27 +28,38 @@
         controls.enableZoom = true;
         controls.maxPolarAngle = Math.PI / 2; // Impede de mover abaixo da base
 
-        // Criar base cinza (muito maior)
-        const baseGeometry = new THREE.BoxGeometry(50, 1, 50); // Base bem maior
+        // Criar base cinza (grande)
+        const baseGeometry = new THREE.BoxGeometry(50, 1, 50);
         const baseMaterial = new THREE.MeshStandardMaterial({ color: 0x888888 });
         const base = new THREE.Mesh(baseGeometry, baseMaterial);
         base.position.y = -0.5;
         scene.add(base);
 
-        // Criar edifícios
-        function criarEdificio(x, z, largura, altura, profundidade, cor) {
-            const geometry = new THREE.BoxGeometry(largura, altura, profundidade);
-            const material = new THREE.MeshStandardMaterial({ color: cor });
-            const edificio = new THREE.Mesh(geometry, material);
-            edificio.position.set(x, altura / 2, z);
-            scene.add(edificio);
-        }
+        // Criar o "cubo azul" com formato personalizado
+        const shape = new THREE.Shape();
+        shape.moveTo(-5, 0);
+        shape.lineTo(5, 0);
+        shape.lineTo(5, 10);
+        shape.lineTo(3, 9);
+        shape.lineTo(3, 8);
+        shape.lineTo(5, 7);
+        shape.lineTo(5, 6);
+        shape.lineTo(3, 5);
+        shape.lineTo(3, 4);
+        shape.lineTo(5, 3);
+        shape.lineTo(5, 2);
+        shape.lineTo(3, 1);
+        shape.lineTo(3, 0);
+        shape.lineTo(-5, 0);
 
-        // Adicionando edifícios ao mapa
-        criarEdificio(-4, -4, 2, 5, 2, 0x0000ff); // Azul
-        criarEdificio(4, -4, 2, 7, 2, 0xff0000); // Vermelho
-        criarEdificio(-4, 4, 3, 6, 3, 0x00ff00); // Verde
-        criarEdificio(4, 4, 2.5, 8, 2.5, 0xffff00); // Amarelo
+        const extrudeSettings = { depth: 2, bevelEnabled: false };
+        const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+        const material = new THREE.MeshStandardMaterial({ color: 0x0000ff });
+        const cuboAzul = new THREE.Mesh(geometry, material);
+        cuboAzul.rotation.x = -Math.PI / 2;
+        cuboAzul.position.set(-10, 0.5, 0);
+
+        scene.add(cuboAzul);
 
         // Luzes
         const light = new THREE.DirectionalLight(0xffffff, 1);
@@ -58,8 +69,8 @@
         const ambientLight = new THREE.AmbientLight(0x404040);
         scene.add(ambientLight);
 
-        // Posição inicial da câmara (mais afastada para ver melhor)
-        camera.position.set(0, 50, 0); // Mais alto para um zoom mais afastado
+        // Posição inicial da câmara
+        camera.position.set(0, 50, 0);
         camera.lookAt(0, 0, 0);
         controls.target.set(0, 0, 0);
         controls.update();
