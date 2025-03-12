@@ -13,14 +13,14 @@
 </head>
 <body>
     <script>
-        // Configuração da cena, câmara e renderizador
+        // Configuração da cena, câmera e renderizador
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
-        // Controles da câmara
+        // Controles da câmera
         const controls = new THREE.OrbitControls(camera, renderer.domElement);
         controls.enableDamping = true;
         controls.dampingFactor = 0.1;
@@ -29,11 +29,11 @@
         controls.maxDistance = 100; // Zoom máximo
         controls.maxPolarAngle = Math.PI / 2; // Restringe a visão a partir de cima
 
-        // Base cinza (mantendo o tamanho original que tinhas)
-        const baseGeometry = new THREE.PlaneGeometry(30, 30); 
-        const baseMaterial = new THREE.MeshBasicMaterial({ color: 0x808080, side: THREE.DoubleSide });
+        // Base cinza (mantendo a mesma espessura original)
+        const baseGeometry = new THREE.BoxGeometry(50, 2, 50); 
+        const baseMaterial = new THREE.MeshBasicMaterial({ color: 0x808080 });
         const base = new THREE.Mesh(baseGeometry, baseMaterial);
-        base.rotation.x = -Math.PI / 2; // Deixa plano no chão
+        base.position.y = -1; // Mantendo a altura correta
         scene.add(base);
 
         // Forma azul personalizada (agora na horizontal)
@@ -62,8 +62,8 @@
         extrudedShape.position.y = 1.5; // Levanta para ficar sobre a base
         scene.add(extrudedShape);
 
-        // Configuração inicial da câmara
-        camera.position.set(0, 40, 40);
+        // Configuração inicial da câmera
+        camera.position.set(0, 60, 60);
         camera.lookAt(0, 0, 0);
 
         // Função de animação
