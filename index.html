@@ -34,33 +34,25 @@
         scene.add(base);
 
         function criarBloco(x, z, cor, largura = 20, altura = 20) {
-            const shape = new THREE.Shape();
-            shape.moveTo(-largura / 2, -altura / 2);
-            shape.lineTo(largura / 2, -altura / 2);
-            shape.lineTo(largura / 2, altura / 2);
-            shape.lineTo(-largura / 2, altura / 2);
-            shape.lineTo(-largura / 2, -altura / 2);
-
-            const extrudeSettings = { depth: 5, bevelEnabled: false };
-            const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+            const geometry = new THREE.BoxGeometry(largura, 5, altura);
             const material = new THREE.MeshBasicMaterial({ color: cor });
             const bloco = new THREE.Mesh(geometry, material);
-            bloco.rotation.x = -Math.PI / 2;
-            bloco.position.set(x, 0, z);
+            bloco.position.set(x, 2.5, z);
             scene.add(bloco);
 
-            // Criar triângulo lateral
-            const triGeometry = new THREE.BufferGeometry();
-            const vertices = new Float32Array([
-                largura / 2, -altura / 2, 2.5,  // Ponto inferior direito
-                largura / 2, altura / 2, 2.5,   // Ponto superior direito
-                largura / 2 + 5, 0, 2.5  // Ponto externo formando a diagonal
-            ]);
-            triGeometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
-            const triMaterial = new THREE.MeshBasicMaterial({ color: cor, side: THREE.DoubleSide });
+            // Criar triângulo com espessura
+            const triShape = new THREE.Shape();
+            triShape.moveTo(0, 0);
+            triShape.lineTo(largura / 2, altura / 2);
+            triShape.lineTo(0, altura);
+            triShape.lineTo(0, 0);
+            
+            const extrudeSettings = { depth: 5, bevelEnabled: false };
+            const triGeometry = new THREE.ExtrudeGeometry(triShape, extrudeSettings);
+            const triMaterial = new THREE.MeshBasicMaterial({ color: cor });
             const triangulo = new THREE.Mesh(triGeometry, triMaterial);
-            triangulo.rotation.x = -Math.PI / 2;
-            triangulo.position.set(x, 0, z);
+            triangulo.rotation.y = Math.PI / 2;
+            triangulo.position.set(x + largura / 2, 0, z);
             scene.add(triangulo);
         }
 
