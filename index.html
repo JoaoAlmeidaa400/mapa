@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mapa Interativo 3D</title>
+    <title>Mapa 3D Personalizado</title>
     <style>
         body { margin: 0; overflow: hidden; }
         canvas { display: block; }
@@ -13,75 +13,59 @@
 </head>
 <body>
     <script>
-        // Cena, câmara e renderizador
+        // Configuração da cena, câmara e renderizador
         const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
-        // Controles de órbita
+        // Controles da câmara
         const controls = new THREE.OrbitControls(camera, renderer.domElement);
         controls.enableDamping = true;
-        controls.dampingFactor = 0.05;
-        controls.rotateSpeed = 0.5;
-        controls.enableZoom = true;
-        controls.maxPolarAngle = Math.PI / 2;
+        controls.dampingFactor = 0.1;
+        controls.screenSpacePanning = false;
+        controls.minDistance = 20; // Definição do zoom mínimo mais afastado
+        controls.maxDistance = 100; // Zoom máximo
+        controls.maxPolarAngle = Math.PI / 2; // Restringe a visão a partir de cima
 
-        // Criar base cinza maior
-        const baseGeometry = new THREE.BoxGeometry(50, 1, 50);
-        const baseMaterial = new THREE.MeshStandardMaterial({ color: 0x888888 });
+        // Base cinza maior
+        const baseGeometry = new THREE.PlaneGeometry(50, 50); // Maior base
+        const baseMaterial = new THREE.MeshBasicMaterial({ color: 0x808080, side: THREE.DoubleSide });
         const base = new THREE.Mesh(baseGeometry, baseMaterial);
-        base.position.y = -0.5;
+        base.rotation.x = -Math.PI / 2; // Deixa plano no chão
         scene.add(base);
 
-        // Criar a parte direita (com cortes diagonais)
+        // Forma azul personalizada
         const shape = new THREE.Shape();
-        shape.moveTo(0, 0);
-        shape.lineTo(5, 0);
-        shape.lineTo(5, 10);
-        shape.lineTo(3, 9);
-        shape.lineTo(3, 8);
-        shape.lineTo(5, 7);
-        shape.lineTo(5, 6);
-        shape.lineTo(3, 5);
-        shape.lineTo(3, 4);
-        shape.lineTo(5, 3);
-        shape.lineTo(5, 2);
-        shape.lineTo(3, 1);
-        shape.lineTo(3, 0);
-        shape.lineTo(0, 0);
+        shape.moveTo(-10, -10);
+        shape.lineTo(10, -10);
+        shape.lineTo(10, 10);
+        shape.lineTo(7, 10);
+        shape.lineTo(6, 7);
+        shape.lineTo(4, 10);
+        shape.lineTo(2, 7);
+        shape.lineTo(0, 10);
+        shape.lineTo(-2, 7);
+        shape.lineTo(-4, 10);
+        shape.lineTo(-6, 7);
+        shape.lineTo(-7, 10);
+        shape.lineTo(-10, 10);
+        shape.lineTo(-10, -10);
 
-        const extrudeSettings = { depth: 2, bevelEnabled: false };
-        const geometryDireita = new THREE.ExtrudeGeometry(shape, extrudeSettings);
-        const materialAzul = new THREE.MeshStandardMaterial({ color: 0x0000ff });
+        // Extrusão para dar volume ao objeto
+        const extrudeSettings = { depth: 3, bevelEnabled: false };
+        const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+        const material = new THREE.MeshBasicMaterial({ color: 0x0000ff });
+        const extrudedShape = new THREE.Mesh(geometry, material);
+        extrudedShape.position.y = 1.5; // Levanta a forma para ficar sobre a base
+        scene.add(extrudedShape);
 
-        const parteDireita = new THREE.Mesh(geometryDireita, materialAzul);
-        parteDireita.rotation.x = -Math.PI / 2;
-        parteDireita.position.set(0, 0.5, 0);
-        scene.add(parteDireita);
-
-        // Criar o retângulo azul liso
-        const rectGeometry = new THREE.BoxGeometry(5, 10, 2);
-        const rectangulo = new THREE.Mesh(rectGeometry, materialAzul);
-        rectangulo.position.set(-2.5, 5, 1); // Alinha ao lado esquerdo
-        scene.add(rectangulo);
-
-        // Luzes
-        const light = new THREE.DirectionalLight(0xffffff, 1);
-        light.position.set(5, 10, 5);
-        scene.add(light);
-
-        const ambientLight = new THREE.AmbientLight(0x404040);
-        scene.add(ambientLight);
-
-        // Posição inicial da câmara
-        camera.position.set(0, 50, 20);
+        // Configuração inicial da câmara
+        camera.position.set(0, 40, 40);
         camera.lookAt(0, 0, 0);
-        controls.target.set(0, 0, 0);
-        controls.update();
 
-        // Animação
+        // Função de animação
         function animate() {
             requestAnimationFrame(animate);
             controls.update();
@@ -91,11 +75,12 @@
 
         // Responsividade
         window.addEventListener('resize', () => {
-            renderer.setSize(window.innerWidth, window.innerHeight);
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
     </script>
 </body>
 </html>
+
