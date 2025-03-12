@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mapa 3D Ajustado</title>
+    <title>Mapa 3D Personalizado</title>
     <style>
         body { margin: 0; overflow: hidden; }
         canvas { display: block; }
@@ -27,7 +27,6 @@
         controls.maxDistance = 100;
         controls.maxPolarAngle = Math.PI / 2;
 
-        // Base cinza
         const baseGeometry = new THREE.BoxGeometry(80, 2, 100);
         const baseMaterial = new THREE.MeshBasicMaterial({ color: 0x808080 });
         const base = new THREE.Mesh(baseGeometry, baseMaterial);
@@ -39,32 +38,23 @@
             shape.moveTo(-10, -10);
             shape.lineTo(10, -10);
             shape.lineTo(10, 10);
-            shape.lineTo(6, 10);
-            shape.lineTo(5, 7);
-            shape.lineTo(3, 10);
-            shape.lineTo(1, 7);
-            shape.lineTo(-1, 10);
-            shape.lineTo(-3, 7);
-            shape.lineTo(-5, 10);
-            shape.lineTo(-7, 7);
             shape.lineTo(-10, 10);
             shape.lineTo(-10, -10);
 
             const extrudeSettings = { depth: 5, bevelEnabled: false };
             const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
-            const material = new THREE.MeshBasicMaterial({ color: cor, side: THREE.DoubleSide });
+            const material = new THREE.MeshBasicMaterial({ color: cor });
             const bloco = new THREE.Mesh(geometry, material);
             bloco.rotation.x = -Math.PI / 2;
-            bloco.position.set(x, 1, z);
+            bloco.position.set(x, 0, z);
             scene.add(bloco);
         }
 
-        // Ajustar posição conforme referência
-        criarBloco(-25, 35, 0x0000ff); // Azul no topo
-        criarBloco(-25, 15, 0xff0000); // Vermelho no meio
-        criarBloco(-25, -5, 0x008000); // Verde em baixo
+        criarBloco(-20, 30, 0x0000ff);
+        criarBloco(-20, 10, 0xff0000);
+        criarBloco(-20, -10, 0x008000);
 
-        camera.position.set(0, 80, 100);
+        camera.position.set(0, 60, 80);
         camera.lookAt(0, 0, 0);
 
         function animate() {
