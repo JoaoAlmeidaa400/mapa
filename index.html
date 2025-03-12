@@ -49,16 +49,18 @@
             bloco.position.set(x, 0, z);
             scene.add(bloco);
 
-            // Criar triângulo do lado interno do mapa
+            // Criar triângulo lateral
             const triGeometry = new THREE.BufferGeometry();
             const vertices = new Float32Array([
-                -largura / 2, 0, z - 5,   // Ponto esquerdo
-                largura / 2, 0, z - 5,    // Ponto direito
-                0, 10, z - 5              // Ponto superior
+                largura / 2, -altura / 2, 2.5,  // Ponto inferior direito
+                largura / 2, altura / 2, 2.5,   // Ponto superior direito
+                largura / 2 + 5, 0, 2.5  // Ponto externo formando a diagonal
             ]);
             triGeometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
-            const triMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide });
+            const triMaterial = new THREE.MeshBasicMaterial({ color: cor, side: THREE.DoubleSide });
             const triangulo = new THREE.Mesh(triGeometry, triMaterial);
+            triangulo.rotation.x = -Math.PI / 2;
+            triangulo.position.set(x, 0, z);
             scene.add(triangulo);
         }
 
