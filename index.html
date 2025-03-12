@@ -13,14 +13,12 @@
 </head>
 <body>
     <script>
-        // Configuração da cena, câmera e renderizador
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
-        // Controles da câmera
         const controls = new THREE.OrbitControls(camera, renderer.domElement);
         controls.enableDamping = true;
         controls.dampingFactor = 0.1;
@@ -29,50 +27,44 @@
         controls.maxDistance = 100;
         controls.maxPolarAngle = Math.PI / 2;
 
-        // Base cinza
-        const baseGeometry = new THREE.BoxGeometry(50, 2, 50);
+        const baseGeometry = new THREE.BoxGeometry(80, 2, 100);
         const baseMaterial = new THREE.MeshBasicMaterial({ color: 0x808080 });
         const base = new THREE.Mesh(baseGeometry, baseMaterial);
         base.position.y = -1;
         scene.add(base);
 
-        // Função para criar blocos com a forma personalizada
-        function criarBloco(x, y, z, cor) {
+        function criarBloco(x, z, cor) {
             const shape = new THREE.Shape();
             shape.moveTo(-10, -10);
             shape.lineTo(10, -10);
             shape.lineTo(10, 10);
-            shape.lineTo(5, 10);
-            shape.lineTo(3, 5);
-            shape.lineTo(1, 10);
-            shape.lineTo(-1, 5);
-            shape.lineTo(-3, 10);
-            shape.lineTo(-5, 5);
-            shape.lineTo(-7, 10);
+            shape.lineTo(7, 10);
+            shape.lineTo(5, 5);
+            shape.lineTo(3, 10);
+            shape.lineTo(1, 5);
+            shape.lineTo(-1, 10);
+            shape.lineTo(-3, 5);
+            shape.lineTo(-5, 10);
+            shape.lineTo(-7, 5);
             shape.lineTo(-10, 10);
             shape.lineTo(-10, -10);
 
-            // Extrusão para dar volume
-            const extrudeSettings = { depth: 3, bevelEnabled: false };
+            const extrudeSettings = { depth: 5, bevelEnabled: false };
             const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
             const material = new THREE.MeshBasicMaterial({ color: cor });
             const bloco = new THREE.Mesh(geometry, material);
-
             bloco.rotation.x = -Math.PI / 2;
-            bloco.position.set(x, y, z);
+            bloco.position.set(x, 0, z);
             scene.add(bloco);
         }
 
-        // Criando os blocos conforme a imagem
-        criarBloco(0, 0, -5, 0x0000ff); // Azul
-        criarBloco(0, 0, -15, 0xff0000); // Vermelho
-        criarBloco(0, 0, -25, 0x008000); // Verde
+        criarBloco(-20, 30, 0x0000ff);
+        criarBloco(-20, 10, 0xff0000);
+        criarBloco(-20, -10, 0x008000);
 
-        // Configuração inicial da câmera
-        camera.position.set(0, 60, 60);
+        camera.position.set(0, 60, 80);
         camera.lookAt(0, 0, 0);
 
-        // Função de animação
         function animate() {
             requestAnimationFrame(animate);
             controls.update();
@@ -80,13 +72,11 @@
         }
         animate();
 
-        // Responsividade
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
-
     </script>
 </body>
 </html>
