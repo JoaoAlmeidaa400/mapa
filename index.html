@@ -1,76 +1,93 @@
-import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Three.js Blocos</title>
+    <style>
+        body { margin: 0; overflow: hidden; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <script type="module">
+        import * as THREE from 'https://cdn.jsdelivr.net/npm/three@latest/build/three.module.js';
+        import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@latest/examples/jsm/controls/OrbitControls.js';
 
-// Cena
-const scene = new THREE.Scene();
+        // Cena e câmara
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(10, 20, 20);
+        camera.lookAt(0, 0, 0);
 
-// Câmara
-const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.set(0, 10, 20);
-camera.lookAt(0, 0, 0);
+        // Renderizador
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
 
-// Renderizador
-const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
+        // Controles de órbita
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.screenSpacePanning = false;
+        controls.maxPolarAngle = Math.PI / 2;
 
-// Controles de órbita
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true;
-controls.dampingFactor = 0.05;
-controls.screenSpacePanning = false;
-controls.maxPolarAngle = Math.PI / 2;
+        // Base cinzenta
+        const baseGeometry = new THREE.BoxGeometry(50, 1, 50);
+        const baseMaterial = new THREE.MeshStandardMaterial({ color: 0x808080 });
+        const base = new THREE.Mesh(baseGeometry, baseMaterial);
+        base.position.set(0, -0.5, 0);
+        scene.add(base);
 
-// Base cinzenta
-const baseGeometry = new THREE.BoxGeometry(50, 1, 50);
-const baseMaterial = new THREE.MeshStandardMaterial({ color: 0x808080 });
-const base = new THREE.Mesh(baseGeometry, baseMaterial);
-base.position.set(0, -0.5, 0);
-scene.add(base);
+        // Função para criar blocos
+        function criarBloco(x, y, z, color) {
+            const shape = new THREE.Shape();
+            shape.moveTo(-5, -5);
+            shape.lineTo(5, -5);
+            shape.lineTo(7, 0);
+            shape.lineTo(5, 5);
+            shape.lineTo(-5, 5);
+            shape.lineTo(-7, 0);
+            shape.lineTo(-5, -5);
 
-// Função para criar um bloco
-function criarBloco(x, y, z, color) {
-    const shape = new THREE.Shape();
-    shape.moveTo(-5, -5);
-    shape.lineTo(5, -5);
-    shape.lineTo(5, 5);
-    shape.lineTo(3, 7);
-    shape.lineTo(-3, 7);
-    shape.lineTo(-5, 5);
-    shape.lineTo(-5, -5);
-    
-    const extrudeSettings = { depth: 3, bevelEnabled: false };
-    const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
-    const material = new THREE.MeshStandardMaterial({ color: color });
-    const bloco = new THREE.Mesh(geometry, material);
-    bloco.position.set(x, y, z);
-    scene.add(bloco);
-}
+            const extrudeSettings = { depth: 3, bevelEnabled: false };
+            const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+            const material = new THREE.MeshStandardMaterial({ color: color });
+            const bloco = new THREE.Mesh(geometry, material);
+            bloco.position.set(x, y, z);
+            scene.add(bloco);
+        }
 
-// Criar blocos
-criarBloco(0, 0.5, 0, 0x0000ff); // Azul
-criarBloco(0, 0.5, -6, 0xff0000); // Vermelho
-criarBloco(0, 0.5, -12, 0x008000); // Verde
+        // Criar blocos
+        criarBloco(0, 0.5, -6, 0x0000ff); // Azul
+        criarBloco(0, 0.5, -12, 0xff0000); // Vermelho
+        criarBloco(0, 0.5, -18, 0x008000); // Verde
+        criarBloco(0, 0.5, -24, 0xffff00); // Amarelo
+        criarBloco(0, 0.5, -30, 0xff00ff); // Roxo
 
-// Luzes
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
-scene.add(ambientLight);
+        // Iluminação
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+        scene.add(ambientLight);
 
-const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
-directionalLight.position.set(10, 10, 10);
-scene.add(directionalLight);
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+        directionalLight.position.set(10, 10, 10);
+        scene.add(directionalLight);
 
-// Animação
-function animate() {
-    requestAnimationFrame(animate);
-    controls.update();
-    renderer.render(scene, camera);
-}
-animate();
+        // Animação
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+        }
+        animate();
 
-// Responsividade
-window.addEventListener('resize', () => {
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-});
+        // Responsividade
+        window.addEventListener('resize', () => {
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+        });
+
+    </script>
+</body>
+</html>
