@@ -33,13 +33,13 @@
         base.position.y = -1;
         scene.add(base);
 
-        function criarBloco(x, z, cor) {
+        function criarBloco(x, z, cor, largura = 20) {
             const shape = new THREE.Shape();
-            shape.moveTo(-10, -10);
-            shape.lineTo(10, -10);
-            shape.lineTo(10, 10);
-            shape.lineTo(-10, 10);
-            shape.lineTo(-10, -10);
+            shape.moveTo(-largura / 2, -10);
+            shape.lineTo(largura / 2, -10);
+            shape.lineTo(largura / 2, 10);
+            shape.lineTo(-largura / 2, 10);
+            shape.lineTo(-largura / 2, -10);
 
             const extrudeSettings = { depth: 5, bevelEnabled: false };
             const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
@@ -50,9 +50,9 @@
             scene.add(bloco);
         }
 
-        criarBloco(-30, -40, 0x0000ff);
-        criarBloco(-30, -20, 0xff0000);
-        criarBloco(-30,  0, 0x008000);
+        criarBloco(-30, -40, 0x0000ff, 20);  // Azul (largura padrão)
+        criarBloco(-30, -20, 0xff0000, 10);  // Vermelho (largura reduzida)
+        criarBloco(-30,  0, 0x008000, 20);   // Verde (largura padrão)
 
         camera.position.set(0, 60, 80);
         camera.lookAt(0, 0, 0);
