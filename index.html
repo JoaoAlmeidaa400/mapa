@@ -29,36 +29,37 @@
         controls.maxDistance = 100; // Zoom máximo
         controls.maxPolarAngle = Math.PI / 2; // Restringe a visão a partir de cima
 
-        // Base cinza maior
-        const baseGeometry = new THREE.PlaneGeometry(50, 50); // Maior base
+        // Base cinza (mantendo o tamanho original que tinhas)
+        const baseGeometry = new THREE.PlaneGeometry(30, 30); 
         const baseMaterial = new THREE.MeshBasicMaterial({ color: 0x808080, side: THREE.DoubleSide });
         const base = new THREE.Mesh(baseGeometry, baseMaterial);
         base.rotation.x = -Math.PI / 2; // Deixa plano no chão
         scene.add(base);
 
-        // Forma azul personalizada
+        // Forma azul personalizada (agora na horizontal)
         const shape = new THREE.Shape();
-        shape.moveTo(-10, -10);
-        shape.lineTo(10, -10);
-        shape.lineTo(10, 10);
-        shape.lineTo(7, 10);
-        shape.lineTo(6, 7);
-        shape.lineTo(4, 10);
-        shape.lineTo(2, 7);
-        shape.lineTo(0, 10);
-        shape.lineTo(-2, 7);
-        shape.lineTo(-4, 10);
-        shape.lineTo(-6, 7);
-        shape.lineTo(-7, 10);
-        shape.lineTo(-10, 10);
-        shape.lineTo(-10, -10);
+        shape.moveTo(-10, -5);
+        shape.lineTo(10, -5);
+        shape.lineTo(10, 5);
+        shape.lineTo(7, 5);
+        shape.lineTo(6, 3);
+        shape.lineTo(4, 5);
+        shape.lineTo(2, 3);
+        shape.lineTo(0, 5);
+        shape.lineTo(-2, 3);
+        shape.lineTo(-4, 5);
+        shape.lineTo(-6, 3);
+        shape.lineTo(-7, 5);
+        shape.lineTo(-10, 5);
+        shape.lineTo(-10, -5);
 
         // Extrusão para dar volume ao objeto
         const extrudeSettings = { depth: 3, bevelEnabled: false };
         const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
         const material = new THREE.MeshBasicMaterial({ color: 0x0000ff });
         const extrudedShape = new THREE.Mesh(geometry, material);
-        extrudedShape.position.y = 1.5; // Levanta a forma para ficar sobre a base
+        extrudedShape.rotation.x = -Math.PI / 2; // Deixa a forma azul na horizontal
+        extrudedShape.position.y = 1.5; // Levanta para ficar sobre a base
         scene.add(extrudedShape);
 
         // Configuração inicial da câmara
@@ -83,4 +84,3 @@
     </script>
 </body>
 </html>
-
