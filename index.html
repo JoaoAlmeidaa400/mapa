@@ -39,23 +39,38 @@
             const bloco = new THREE.Mesh(geometry, material);
             bloco.position.set(x, 2.5, z);
             scene.add(bloco);
+            
+            adicionarTriangulo(bloco);
         }
 
-        criarBloco(-30, -40, 0x0000ff, 20, 20); // Azul cima
-        criarBloco(-30, -23.5, 0xff0000, 20, 13); // Vermelho cima
-        criarBloco(-30, -10.5, 0x008000, 20, 13);  // Verde cima
-        
-        criarBloco(-30, 10.5, 0x008000, 20, 13);  // Verde baixo
-        criarBloco(-30, 23.5, 0xff0000, 20, 13); // Vermelho baixo
-        criarBloco(-30, 40, 0x0000ff, 20, 20); // Azul baixo
+        function adicionarTriangulo(bloco) {
+            const geometry = new THREE.BufferGeometry();
+            const vertices = new Float32Array([
+                -5, 5, 0,  // Ponto 1
+                 5, 5, 0,  // Ponto 2
+                 0, 10, 0  // Ponto 3
+            ]);
+            geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+            
+            const material = new THREE.MeshBasicMaterial({ color: 0xffff00, side: THREE.DoubleSide });
+            const triangulo = new THREE.Mesh(geometry, material);
+            
+            triangulo.position.set(0, 2.5, 10); // Ajustar posição
+            bloco.add(triangulo);
+        }
 
-        criarBloco(30, -40, 0x0000ff, 20, 20); // Azul direita
-        criarBloco(30, -24.5, 0xff0000, 20, 11); // Vermelho direita
-        criarBloco(30, -13.5, 0x008000, 20, 11);  // Verde direita
-        criarBloco(30, -2.5, 0x0000ff, 20, 11);  // Azul direita b
-
-        criarBloco(30, 15.5, 0x008000, 20, 11);  // Verde baixo
-        criarBloco(30, 26.5, 0xff0000, 20, 11); // Vermelho baixo
+        criarBloco(-30, -40, 0x0000ff);
+        criarBloco(-30, -23.5, 0xff0000);
+        criarBloco(-30, -10.5, 0x008000);
+        criarBloco(-30, 10.5, 0x008000);
+        criarBloco(-30, 23.5, 0xff0000);
+        criarBloco(-30, 40, 0x0000ff);
+        criarBloco(30, -40, 0x0000ff);
+        criarBloco(30, -24.5, 0xff0000);
+        criarBloco(30, -13.5, 0x008000);
+        criarBloco(30, -2.5, 0x0000ff);
+        criarBloco(30, 15.5, 0x008000);
+        criarBloco(30, 26.5, 0xff0000);
         
         camera.position.set(0, 60, 80);
         camera.lookAt(0, 0, 0);
