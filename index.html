@@ -41,29 +41,35 @@
             scene.add(bloco);
         }
 
-        criarBloco(-30, -40, 0x0000ff, 20, 20); // Azul cima
-        criarBloco(-30, -23.5, 0xff0000, 20, 13); // Vermelho cima
-        criarBloco(-30, -10.5, 0x008000, 20, 13);  // Verde cima
-        
-        criarBloco(-30, 10.5, 0x008000, 20, 13);  // Verde baixo
-        criarBloco(-30, 23.5, 0xff0000, 20, 13); // Vermelho baixo
-        criarBloco(-30, 40, 0x0000ff, 20, 20); // Azul baixo
+        criarBloco(-30, -40, 0x0000ff, 20, 20);
+        criarBloco(-30, -23.5, 0xff0000, 20, 13);
+        criarBloco(-30, -10.5, 0x008000, 20, 13);
+        criarBloco(-30, 10.5, 0x008000, 20, 13);
+        criarBloco(-30, 23.5, 0xff0000, 20, 13);
+        criarBloco(-30, 40, 0x0000ff, 20, 20);
+        criarBloco(30, -40, 0x0000ff, 20, 20);
+        criarBloco(30, -24.5, 0xff0000, 20, 11);
+        criarBloco(30, -13.5, 0x008000, 20, 11);
+        criarBloco(30, -2.5, 0x0000ff, 20, 11);
+        criarBloco(30, 15.5, 0x008000, 20, 11);
+        criarBloco(30, 26.5, 0xff0000, 20, 11);
 
-        criarBloco(30, -40, 0x0000ff, 20, 20); // Azul direita
-        criarBloco(30, -24.5, 0xff0000, 20, 11); // Vermelho direita
-        criarBloco(30, -13.5, 0x008000, 20, 11);  // Verde direita
-        criarBloco(30, -2.5, 0x0000ff, 20, 11);  // Azul direita b
+        // Criar um triângulo 3D no centro
+        const triGeometry = new THREE.BufferGeometry();
+        const vertices = new Float32Array([
+            0, 10, 0,   // Vértice superior
+            -5, 0, 5,   // Vértice inferior esquerdo
+            5, 0, 5    // Vértice inferior direito
+        ]);
+        triGeometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+        triGeometry.setIndex([0, 1, 2]);
+        triGeometry.computeVertexNormals();
 
-        criarBloco(30, 15.5, 0x008000, 20, 11);  // Verde baixo
-        criarBloco(30, 26.5, 0xff0000, 20, 11); // Vermelho baixo
-        
-        // Criar um triângulo 3D (cone) no meio da cena
-        const coneGeometry = new THREE.ConeGeometry(10, 20, 4);
-        const coneMaterial = new THREE.MeshBasicMaterial({ color: 0xffff00 });
-        const cone = new THREE.Mesh(coneGeometry, coneMaterial);
-        cone.position.set(0, 10, 0);
-        scene.add(cone);
-        
+        const triMaterial = new THREE.MeshBasicMaterial({ color: 0xffff00, side: THREE.DoubleSide });
+        const triangulo = new THREE.Mesh(triGeometry, triMaterial);
+        triangulo.position.set(0, 5, 0);
+        scene.add(triangulo);
+
         camera.position.set(0, 60, 80);
         camera.lookAt(0, 0, 0);
 
