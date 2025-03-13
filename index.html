@@ -27,51 +27,58 @@
         controls.maxDistance = 100;
         controls.maxPolarAngle = Math.PI / 2;
 
+        // Adicionar luz ambiente e direcional para evitar escuridão total
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+        directionalLight.position.set(50, 50, 50);
+        scene.add(directionalLight);
+
         const baseGeometry = new THREE.BoxGeometry(80, 2, 100);
-        const baseMaterial = new THREE.MeshBasicMaterial({ color: 0x808080 });
+        const baseMaterial = new THREE.MeshLambertMaterial({ color: 0x808080 });
         const base = new THREE.Mesh(baseGeometry, baseMaterial);
         base.position.y = -1;
         scene.add(base);
 
         function criarBloco(x, z, cor, largura = 20, altura = 20) {
             const geometry = new THREE.BoxGeometry(largura, 5, altura);
-            const material = new THREE.MeshBasicMaterial({ color: cor });
+            const material = new THREE.MeshLambertMaterial({ color: cor });
             const bloco = new THREE.Mesh(geometry, material);
             bloco.position.set(x, 2.5, z);
             scene.add(bloco);
 
-            // Criar triângulo deitado na base
+            // Criar triângulo deitado corretamente sobre a base
             const triGeometry = new THREE.Geometry();
             triGeometry.vertices.push(
-                new THREE.Vector3(0, 0, 0), // Vértice na base
-                new THREE.Vector3(altura, 0, 0), // Outro vértice na base
-                new THREE.Vector3(altura / 2, 0, largura) // Ponta oposta
+                new THREE.Vector3(-largura / 2, 0, -altura / 2),  // Canto esquerdo
+                new THREE.Vector3(largura / 2, 0, -altura / 2),   // Canto direito
+                new THREE.Vector3(0, 0, altura / 2)               // Ponta do triângulo
             );
             triGeometry.faces.push(new THREE.Face3(0, 1, 2));
             triGeometry.computeFaceNormals();
 
-            const triMaterial = new THREE.MeshBasicMaterial({ color: cor, side: THREE.DoubleSide });
+            const triMaterial = new THREE.MeshLambertMaterial({ color: cor, side: THREE.DoubleSide });
             const triangulo = new THREE.Mesh(triGeometry, triMaterial);
-            triangulo.position.set(x - largura / 2, 1, z);
+            triangulo.position.set(x, 0, z);
             scene.add(triangulo);
         }
 
-        criarBloco(-30, -40, 0x0000ff, 20, 20); // Azul cima
-        criarBloco(-30, -23.5, 0xff0000, 20, 13); // Vermelho cima
-        criarBloco(-30, -10.5, 0x008000, 20, 13);  // Verde cima
-        
-        criarBloco(-30, 10.5, 0x008000, 20, 13);  // Verde baixo
-        criarBloco(-30, 23.5, 0xff0000, 20, 13); // Vermelho baixo
-        criarBloco(-30, 40, 0x0000ff, 20, 20); // Azul baixo
+        criarBloco(-30, -40, 0x0000ff, 20, 20);
+        criarBloco(-30, -23.5, 0xff0000, 20, 13);
+        criarBloco(-30, -10.5, 0x008000, 20, 13);
 
-        criarBloco(30, -40, 0x0000ff, 20, 20); // Azul direita
-        criarBloco(30, -24.5, 0xff0000, 20, 11); // Vermelho direita
-        criarBloco(30, -13.5, 0x008000, 20, 11);  // Verde direita
-        criarBloco(30, -2.5, 0x0000ff, 20, 11);  // Azul direita b
+        criarBloco(-30, 10.5, 0x008000, 20, 13);
+        criarBloco(-30, 23.5, 0xff0000, 20, 13);
+        criarBloco(-30, 40, 0x0000ff, 20, 20);
 
-        criarBloco(30, 15.5, 0x008000, 20, 11);  // Verde baixo
-        criarBloco(30, 26.5, 0xff0000, 20, 11); // Vermelho baixo
-        
+        criarBloco(30, -40, 0x0000ff, 20, 20);
+        criarBloco(30, -24.5, 0xff0000, 20, 11);
+        criarBloco(30, -13.5, 0x008000, 20, 11);
+        criarBloco(30, -2.5, 0x0000ff, 20, 11);
+
+        criarBloco(30, 15.5, 0x008000, 20, 11);
+        criarBloco(30, 26.5, 0xff0000, 20, 11);
+
         camera.position.set(0, 60, 80);
         camera.lookAt(0, 0, 0);
 
