@@ -40,17 +40,16 @@
             bloco.position.set(x, 2.5, z);
             scene.add(bloco);
 
-            // Criar triângulo deitado na base cinzenta
-            const triGeometry = new THREE.Geometry();
-            triGeometry.vertices.push(
-                new THREE.Vector3(0, 0, 0),  // Ponto perto do cubo
-                new THREE.Vector3(altura, 0, 0), // Ponta do triângulo
-                new THREE.Vector3(0, 0, largura) // Outra ponta na base
-            );
-            triGeometry.faces.push(new THREE.Face3(0, 1, 2));
-            triGeometry.computeFaceNormals();
-
-            const triMaterial = new THREE.MeshBasicMaterial({ color: cor, side: THREE.DoubleSide });
+            // Criar triângulo deitado com a base junto ao cubo
+            const triShape = new THREE.Shape();
+            triShape.moveTo(0, 0);
+            triShape.lineTo(altura, 0);
+            triShape.lineTo(altura / 2, 5);
+            triShape.lineTo(0, 0);
+            
+            const extrudeSettings = { depth: largura, bevelEnabled: false };
+            const triGeometry = new THREE.ExtrudeGeometry(triShape, extrudeSettings);
+            const triMaterial = new THREE.MeshBasicMaterial({ color: cor });
             const triangulo = new THREE.Mesh(triGeometry, triMaterial);
             triangulo.rotation.x = -Math.PI / 2;
             triangulo.position.set(x, 0, z + altura / 2);
