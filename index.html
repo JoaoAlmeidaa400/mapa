@@ -33,44 +33,59 @@
         base.position.y = -1;
         scene.add(base);
 
-        function criarBloco(x, z, cor, largura = 20, altura = 20, triangulos = []) {
+        function criarBloco(x, z, cor, largura = 20, altura = 20) {
             const geometry = new THREE.BoxGeometry(largura, 5, altura);
             const material = new THREE.MeshBasicMaterial({ color: cor });
             const bloco = new THREE.Mesh(geometry, material);
             bloco.position.set(x, 2.5, z);
             scene.add(bloco);
-            
-            triangulos.forEach(pos => adicionarTriangulo(bloco, largura, pos.x, pos.z));
+            return bloco;
         }
 
-        function adicionarTriangulo(bloco, largura, deslocamentoX, deslocamentoZ) {
+        function adicionarTriangulo(x, y, z) {
             const geometry = new THREE.BufferGeometry();
             const vertices = new Float32Array([
-                10, 2.5, largura / 3.1,  
-                10, 2.5, -largura / 3.1,  
-                15, 2.5, 0  
+                10, 2.5, 6.5,
+                10, 2.5, -6.5,
+                15, 2.5, 0
             ]);
             geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
             
             const material = new THREE.MeshBasicMaterial({ color: 0xffff00, side: THREE.DoubleSide });
             const triangulo = new THREE.Mesh(geometry, material);
             
-            triangulo.position.set(deslocamentoX, 0, deslocamentoZ); 
-            bloco.add(triangulo);
+            triangulo.position.set(x, y, z);
+            scene.add(triangulo);
         }
 
-        criarBloco( 0, -40, 0x0000ff, 20, 20, [{x: 2, z: 0}]);
-        criarBloco(-30, -23.5, 0xff0000, 20, 13, [{x: 2, z: 0}]);
-        criarBloco(-30, -10.5, 0x008000, 20, 13, [{x: 2, z: 0}]);
-        criarBloco(-30, 10.5, 0x008000, 20, 13, [{x: 2, z: 0}]);
-        criarBloco(-30, 23.5, 0xff0000, 20, 13, [{x: 2, z: 0}]);
-        criarBloco(-30, 40, 0x0000ff, 20, 20, [{x: 2, z: 0}]);
-        criarBloco(30, -40, 0x0000ff, 20, 20, [{x: 2, z: 3}, {x: 2, z: -3}]);
-        criarBloco(30, -24.5, 0xff0000, 20, 11, [{x: 2, z: 3}, {x: 2, z: -3}]);
-        criarBloco(30, -13.5, 0x008000, 20, 11, [{x: 2, z: 3}, {x: 2, z: -3}]);
-        criarBloco(30, -2.5, 0x0000ff, 20, 11, [{x: 2, z: 3}, {x: 2, z: -3}]);
-        criarBloco(30, 15.5, 0x008000, 20, 11, [{x: 2, z: 3}, {x: 2, z: -3}]);
-        criarBloco(30, 26.5, 0xff0000, 20, 11, [{x: 2, z: 3}, {x: 2, z: -3}]);
+        const blocos = [
+            criarBloco(-30, -40, 0x0000ff, 20, 20),
+            criarBloco(-30, -23.5, 0xff0000, 20, 13),
+            criarBloco(-30, -10.5, 0x008000, 20, 13),
+            criarBloco(-30, 10.5, 0x008000, 20, 13),
+            criarBloco(-30, 23.5, 0xff0000, 20, 13),
+            criarBloco(-30, 40, 0x0000ff, 20, 20),
+            criarBloco(30, -40, 0x0000ff, 20, 20),
+            criarBloco(30, -24.5, 0xff0000, 20, 11),
+            criarBloco(30, -13.5, 0x008000, 20, 11),
+            criarBloco(30, -2.5, 0x0000ff, 20, 11),
+            criarBloco(30, 15.5, 0x008000, 20, 11),
+            criarBloco(30, 26.5, 0xff0000, 20, 11)
+        ];
+
+        // Adiciona triângulos separadamente para evitar movimentação conjunta com os blocos
+        adicionarTriangulo(32, 2.5, -37);
+        adicionarTriangulo(32, 2.5, -43);
+        adicionarTriangulo(32, 2.5, -21.5);
+        adicionarTriangulo(32, 2.5, -27.5);
+        adicionarTriangulo(32, 2.5, -10);
+        adicionarTriangulo(32, 2.5, -16);
+        adicionarTriangulo(32, 2.5, -1);
+        adicionarTriangulo(32, 2.5, -4);
+        adicionarTriangulo(32, 2.5, 18);
+        adicionarTriangulo(32, 2.5, 13);
+        adicionarTriangulo(32, 2.5, 29);
+        adicionarTriangulo(32, 2.5, 24);
         
         camera.position.set(0, 60, 80);
         camera.lookAt(0, 0, 0);
