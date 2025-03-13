@@ -27,15 +27,23 @@
         controls.maxDistance = 100;
         controls.maxPolarAngle = Math.PI / 2;
 
+        // Adicionar luz para melhor visualização
+        const light = new THREE.DirectionalLight(0xffffff, 1);
+        light.position.set(10, 20, 10);
+        scene.add(light);
+
+        const ambientLight = new THREE.AmbientLight(0x404040, 1);
+        scene.add(ambientLight);
+
         const baseGeometry = new THREE.BoxGeometry(80, 2, 100);
-        const baseMaterial = new THREE.MeshBasicMaterial({ color: 0x808080 });
+        const baseMaterial = new THREE.MeshStandardMaterial({ color: 0x808080 });
         const base = new THREE.Mesh(baseGeometry, baseMaterial);
         base.position.y = -1;
         scene.add(base);
 
         function criarBloco(x, z, cor, largura = 20, altura = 20) {
             const geometry = new THREE.BoxGeometry(largura, 5, altura);
-            const material = new THREE.MeshBasicMaterial({ color: cor });
+            const material = new THREE.MeshStandardMaterial({ color: cor });
             const bloco = new THREE.Mesh(geometry, material);
             bloco.position.set(x, 2.5, z);
             scene.add(bloco);
@@ -54,31 +62,12 @@
         criarBloco(30, 15.5, 0x008000, 20, 11);
         criarBloco(30, 26.5, 0xff0000, 20, 11);
 
-        // Criar um prisma triangular 3D
-        const triGeometry = new THREE.Geometry();
-        triGeometry.vertices.push(
-            new THREE.Vector3(-5, 0, -5), // Base esquerda
-            new THREE.Vector3(5, 0, -5),  // Base direita
-            new THREE.Vector3(0, 10, 0),  // Ponta do triângulo
-            new THREE.Vector3(-5, 0, 5), // Base esquerda traseira
-            new THREE.Vector3(5, 0, 5)  // Base direita traseira
-        );
-
-        triGeometry.faces.push(
-            new THREE.Face3(0, 1, 2), // Frente
-            new THREE.Face3(3, 4, 2), // Trás
-            new THREE.Face3(0, 3, 2), // Lado esquerdo
-            new THREE.Face3(1, 4, 2), // Lado direito
-            new THREE.Face3(0, 1, 4), // Base frente
-            new THREE.Face3(0, 4, 3)  // Base trás
-        );
-
-        triGeometry.computeFaceNormals();
-
-        const triMaterial = new THREE.MeshBasicMaterial({ color: 0xffff00, side: THREE.DoubleSide });
-        const prismaTriangular = new THREE.Mesh(triGeometry, triMaterial);
-        prismaTriangular.position.set(0, 5, 0);
-        scene.add(prismaTriangular);
+        // Criar triângulo 3D (prisma triangular)
+        const triGeometry = new THREE.ConeGeometry(10, 20, 3);
+        const triMaterial = new THREE.MeshStandardMaterial({ color: 0xffff00 });
+        const triangulo = new THREE.Mesh(triGeometry, triMaterial);
+        triangulo.position.set(0, 10, 0);
+        scene.add(triangulo);
 
         camera.position.set(0, 60, 80);
         camera.lookAt(0, 0, 0);
