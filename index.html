@@ -42,7 +42,7 @@
             return bloco;
         }
 
-        function adicionarTriangulo(x, y, z) {
+        function adicionarTriangulo(x, y, z, rotacao = 0) {
             const geometry = new THREE.BufferGeometry();
             const vertices = new Float32Array([
                 10, 2.5, 6.5,
@@ -55,6 +55,7 @@
             const triangulo = new THREE.Mesh(geometry, material);
             
             triangulo.position.set(x, y, z);
+            triangulo.rotation.y = rotacao;
             scene.add(triangulo);
         }
 
@@ -73,21 +74,21 @@
             criarBloco(30, 26.5, 0xff0000, 20, 11)
         ];
 
-        // Triangulos da esquerda
+        // Triângulos da esquerda
         adicionarTriangulo(-30, 2.5, -23.5);
         adicionarTriangulo(-30, 2.5, -10.5);
         adicionarTriangulo(-30, 2.5, 10.5);
         adicionarTriangulo(-30, 2.5, 23.5);
 
-        // Triangulos da direita
-        adicionarTriangulo(32, 2.5, 3);
-        adicionarTriangulo(32, 2.5, -16);
-        adicionarTriangulo(32, 2.5, -1);
-        adicionarTriangulo(32, 2.5, -4);
-        adicionarTriangulo(32, 2.5, 18);
-        adicionarTriangulo(32, 2.5, 13);
-        adicionarTriangulo(32, 2.5, 29);
-        adicionarTriangulo(32, 2.5, 24);
+        // Triângulos da direita com rotação personalizada
+        adicionarTriangulo(32, 2.5, 3, Math.PI / 4);
+        adicionarTriangulo(32, 2.5, -16, Math.PI / 6);
+        adicionarTriangulo(32, 2.5, -1, Math.PI / 3);
+        adicionarTriangulo(32, 2.5, -4, Math.PI / 8);
+        adicionarTriangulo(32, 2.5, 18, Math.PI / 2);
+        adicionarTriangulo(32, 2.5, 13, -Math.PI / 4);
+        adicionarTriangulo(32, 2.5, 29, -Math.PI / 6);
+        adicionarTriangulo(32, 2.5, 24, -Math.PI / 3);
         
         camera.position.set(0, 60, 80);
         camera.lookAt(0, 0, 0);
