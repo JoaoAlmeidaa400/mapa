@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Three.js - Estrutura Ajustada</title>
+    <title>Three.js - Mapa Interativo</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body style="margin: 0; overflow: hidden;">
@@ -15,7 +15,7 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
-        // Luz ambiente
+        // Adicionando luz
         const light = new THREE.DirectionalLight(0xffffff, 1);
         light.position.set(5, 10, 5);
         scene.add(light);
@@ -27,7 +27,7 @@
         floor.position.set(0, -0.1, 0);
         scene.add(floor);
 
-        // Criando os blocos (mantendo como estavam antes)
+        // Criando os blocos conforme estavam antes
         function criarBloco(x, y, z, cor) {
             const geometry = new THREE.BoxGeometry(2, 1, 1);
             const material = new THREE.MeshLambertMaterial({ color: cor });
@@ -36,7 +36,7 @@
             scene.add(bloco);
         }
 
-        // Criando os blocos conforme antes
+        // Criando os blocos com as cores e posições originais
         criarBloco(-3, 0.5, 3, 0x0000ff); // Azul
         criarBloco(-1, 0.5, 3, 0xff0000); // Vermelho
         criarBloco(1, 0.5, 3, 0x00ff00); // Verde
@@ -47,19 +47,20 @@
         criarBloco(1, 0.5, -3, 0x00ff00); // Verde
         criarBloco(3, 0.5, -3, 0x0000ff); // Azul
 
-        // Criando a pirâmide no local desejado
+        // Criando a pirâmide exatamente como estava antes
         function criarPiramide(x, y, z, cor) {
             const geometry = new THREE.ConeGeometry(1, 2, 4);
             const material = new THREE.MeshLambertMaterial({ color: cor });
             const piramide = new THREE.Mesh(geometry, material);
             piramide.position.set(x, y, z);
-            piramide.rotation.y = Math.PI / 4; // Ajustando a rotação para ficar alinhada corretamente
+            piramide.rotation.y = Math.PI / 4;
             scene.add(piramide);
         }
 
-        // Posicionando a pirâmide conforme a área marcada na imagem
-        criarPiramide(0, 1, -1, 0xffff00); // Amarelo
+        // Posição original da pirâmide
+        criarPiramide(2, 1, 0, 0xffff00); // Amarelo
 
+        // Configuração da câmera
         camera.position.set(0, 5, 10);
         camera.lookAt(0, 0, 0);
 
