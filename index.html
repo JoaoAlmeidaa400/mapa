@@ -57,6 +57,13 @@
         criarBloco(30, 15.5, 0x008000, 20, 11);  // Verde baixo
         criarBloco(30, 26.5, 0xff0000, 20, 11); // Vermelho baixo
         
+        // Criar um triângulo 3D (cone) no meio da cena
+        const coneGeometry = new THREE.ConeGeometry(10, 20, 4);
+        const coneMaterial = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+        const cone = new THREE.Mesh(coneGeometry, coneMaterial);
+        cone.position.set(0, 10, 0);
+        scene.add(cone);
+        
         camera.position.set(0, 60, 80);
         camera.lookAt(0, 0, 0);
 
