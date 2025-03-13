@@ -46,16 +46,16 @@
         function adicionarTriangulo(bloco) {
             const geometry = new THREE.BufferGeometry();
             const vertices = new Float32Array([
-                -5, 5, 0,  // Ponto 1
-                 5, 5, 0,  // Ponto 2
-                 0, 10, 0  // Ponto 3
+                -5, 0, 5,  // Ponto 1 (esquerda)
+                 5, 0, 5,  // Ponto 2 (direita)
+                 0, 5, 5   // Ponto 3 (topo)
             ]);
             geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
             
             const material = new THREE.MeshBasicMaterial({ color: 0xffff00, side: THREE.DoubleSide });
             const triangulo = new THREE.Mesh(geometry, material);
             
-            triangulo.position.set(0, 2.5, 10); // Ajustar posição
+            triangulo.position.set(0, 2.5, 10); // Posicionando na frente do cubo
             bloco.add(triangulo);
         }
 
