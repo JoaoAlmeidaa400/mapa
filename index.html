@@ -46,16 +46,16 @@
         function adicionarTriangulo(bloco, largura) {
             const geometry = new THREE.BufferGeometry();
             const vertices = new Float32Array([
-                0, 0, largura / 2,  // Ponto esquerdo
-                5, 0, largura / 2,   // Ponto superior
-                5,  0 , largura / 2  // Ponto direito (triângulo deitado na vertical)
+                0, 1, largura / 2,  // Ponto esquerdo
+                5, 1, largura / 2,   // Ponto superior
+                5,  1 , largura / 2  // Ponto direito (triângulo deitado na vertical)
             ]);
             geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
             
             const material = new THREE.MeshBasicMaterial({ color: 0xffff00, side: THREE.DoubleSide });
             const triangulo = new THREE.Mesh(geometry, material);
             
-            triangulo.position.set(largura / 10, 1, 0); // Coloca o triângulo do lado direito do bloco
+            triangulo.position.set(largura / 10, 3, 0); // Coloca o triângulo do lado direito do bloco
             bloco.add(triangulo);
         }
 
