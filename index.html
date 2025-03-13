@@ -62,11 +62,11 @@
         criarBloco(30, 15.5, 0x008000, 20, 11);
         criarBloco(30, 26.5, 0xff0000, 20, 11);
 
-        // Criar triângulo 3D (prisma triangular)
+        // Criar triângulo 3D (prisma triangular) e posicioná-lo corretamente
         const triGeometry = new THREE.ConeGeometry(10, 20, 3);
         const triMaterial = new THREE.MeshStandardMaterial({ color: 0xffff00 });
         const triangulo = new THREE.Mesh(triGeometry, triMaterial);
-        triangulo.position.set(0, 10, 0);
+        triangulo.position.set(0, 5, 30); // Ajustado para ficar onde desenhou a linha
         scene.add(triangulo);
 
         camera.position.set(0, 60, 80);
@@ -87,3 +87,4 @@
     </script>
 </body>
 </html>
+
