@@ -47,8 +47,8 @@
             const geometry = new THREE.BufferGeometry();
             const vertices = new Float32Array([
                 0, 0, largura / 2,  // Ponto esquerdo
-                0, 5, largura / 2,   // Ponto superior
-                5, 2.5, largura / 2  // Ponto direito (triângulo deitado na vertical)
+                5, 5, largura / 2,   // Ponto superior
+                5, 2.5, largura / 5  // Ponto direito (triângulo deitado na vertical)
             ]);
             geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
             
