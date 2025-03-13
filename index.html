@@ -43,8 +43,8 @@
             // Criar triângulo deitado como extensão do cubo
             const triShape = new THREE.Shape();
             triShape.moveTo(0, 0);
-            triShape.lineTo(altura / 2, 5);
             triShape.lineTo(altura, 0);
+            triShape.lineTo(altura / 2, 5);
             triShape.lineTo(0, 0);
             
             const extrudeSettings = { depth: largura, bevelEnabled: false };
@@ -52,8 +52,7 @@
             const triMaterial = new THREE.MeshBasicMaterial({ color: cor });
             const triangulo = new THREE.Mesh(triGeometry, triMaterial);
             triangulo.rotation.x = -Math.PI / 2;
-            triangulo.rotation.z = Math.PI;
-            triangulo.position.set(x, 2.5, z + altura / 2);
+            triangulo.position.set(x, 2.5, z - altura / 2);
             scene.add(triangulo);
         }
 
