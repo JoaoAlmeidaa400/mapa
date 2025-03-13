@@ -40,22 +40,22 @@
             bloco.position.set(x, 2.5, z);
             scene.add(bloco);
             
-            adicionarTriangulo(bloco, largura, altura);
+            adicionarTriangulo(bloco, largura);
         }
 
-        function adicionarTriangulo(bloco, largura, altura) {
+        function adicionarTriangulo(bloco, largura) {
             const geometry = new THREE.BufferGeometry();
             const vertices = new Float32Array([
-                -largura / 4, 0, altura / 2 + 0.1,  // Ponto 1 (esquerda)
-                largura / 4, 0, altura / 2 + 0.1,   // Ponto 2 (direita)
-                0, 5, altura / 2 + 0.1   // Ponto 3 (topo)
+                0, -2.5, largura / 2,  // Ponto inferior esquerdo
+                0, 2.5, largura / 2,   // Ponto superior esquerdo
+                5, 0, largura / 2      // Ponto direito (triângulo deitado)
             ]);
             geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
             
             const material = new THREE.MeshBasicMaterial({ color: 0xffff00, side: THREE.DoubleSide });
             const triangulo = new THREE.Mesh(geometry, material);
             
-            triangulo.position.set(0, 0, altura / 2); // Ajustando para ficar na horizontal do lado direito
+            triangulo.position.set(largura / 2, 0, 0); // Coloca o triângulo do lado direito do bloco
             bloco.add(triangulo);
         }
 
