@@ -17,6 +17,7 @@
         const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.physicallyCorrectLights = true; // Garante melhor iluminação
         document.body.appendChild(renderer.domElement);
 
         const controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -27,22 +28,24 @@
         controls.maxDistance = 100;
         controls.maxPolarAngle = Math.PI / 2;
 
-        // Adicionar luz ambiente e direcional para evitar escuridão total
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        // Luzes mais fortes para evitar tela preta
+        const ambientLight = new THREE.AmbientLight(0xffffff, 1.2); // Mais intensa
         scene.add(ambientLight);
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-        directionalLight.position.set(50, 50, 50);
+        
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
+        directionalLight.position.set(50, 100, 50);
+        directionalLight.castShadow = true;
         scene.add(directionalLight);
 
         const baseGeometry = new THREE.BoxGeometry(80, 2, 100);
-        const baseMaterial = new THREE.MeshLambertMaterial({ color: 0x808080 });
+        const baseMaterial = new THREE.MeshStandardMaterial({ color: 0x808080 });
         const base = new THREE.Mesh(baseGeometry, baseMaterial);
         base.position.y = -1;
         scene.add(base);
 
         function criarBloco(x, z, cor, largura = 20, altura = 20) {
             const geometry = new THREE.BoxGeometry(largura, 5, altura);
-            const material = new THREE.MeshLambertMaterial({ color: cor });
+            const material = new THREE.MeshStandardMaterial({ color: cor });
             const bloco = new THREE.Mesh(geometry, material);
             bloco.position.set(x, 2.5, z);
             scene.add(bloco);
@@ -57,7 +60,7 @@
             triGeometry.faces.push(new THREE.Face3(0, 1, 2));
             triGeometry.computeFaceNormals();
 
-            const triMaterial = new THREE.MeshLambertMaterial({ color: cor, side: THREE.DoubleSide });
+            const triMaterial = new THREE.MeshStandardMaterial({ color: cor, side: THREE.DoubleSide });
             const triangulo = new THREE.Mesh(triGeometry, triMaterial);
             triangulo.position.set(x, 0, z);
             scene.add(triangulo);
