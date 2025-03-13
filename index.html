@@ -55,7 +55,7 @@
             const material = new THREE.MeshBasicMaterial({ color: 0xffff00, side: THREE.DoubleSide });
             const triangulo = new THREE.Mesh(geometry, material);
             
-            triangulo.position.set(largura / 10, 10, 0); // Coloca o triângulo do lado direito do bloco
+            triangulo.position.set(largura / 10, 0, 0); // Coloca o triângulo do lado direito do bloco
             bloco.add(triangulo);
         }
 
