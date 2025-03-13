@@ -42,12 +42,12 @@
             return bloco;
         }
 
-        function adicionarTriangulo(x, y, z, rotacao = 0) {
+        function adicionarTriangulo(x, y, z, rotacao = 0, largura = 6.5, comprimento = 5) {
             const geometry = new THREE.BufferGeometry();
             const vertices = new Float32Array([
-                10, 2.5, 6.5,
-                10, 2.5, -6.5,
-                15, 2.5, 0
+                10, 2.5, largura,
+                10, 2.5, -largura,
+                10 + comprimento, 2.5, 0
             ]);
             geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
             
@@ -80,15 +80,15 @@
         adicionarTriangulo(-30, 2.5, 10.5);
         adicionarTriangulo(-30, 2.5, 23.5);
 
-        // Triângulos da direita com rotação personalizada
-        adicionarTriangulo(30, 2, 26.5, Math.PI / 1);
-        adicionarTriangulo(0, 2.5, -16, Math.PI / 1);
-        adicionarTriangulo(0, 2.5, -1, Math.PI / 1);
-        adicionarTriangulo(0, 2.5, -4, Math.PI / 1);
-        adicionarTriangulo(0, 2.5, 18, Math.PI / 1);
-        adicionarTriangulo(0, 2.5, 13, -Math.PI / 1);
-        adicionarTriangulo(0, 2.5, 29, -Math.PI / 1);
-        adicionarTriangulo(0, 2.5, 24, -Math.PI / 1);
+        // Triângulos da direita com comprimento variável
+        adicionarTriangulo(30, 2.5, 26.5, Math.PI / 1, 6.5, 8);
+        adicionarTriangulo(0, 2.5, -16, Math.PI / 1, 6.5, 7);
+        adicionarTriangulo(0, 2.5, -1, Math.PI / 1, 6.5, 6);
+        adicionarTriangulo(0, 2.5, -4, Math.PI / 1, 6.5, 5);
+        adicionarTriangulo(0, 2.5, 18, Math.PI / 1, 6.5, 9);
+        adicionarTriangulo(0, 2.5, 13, -Math.PI / 1, 6.5, 7);
+        adicionarTriangulo(0, 2.5, 29, -Math.PI / 1, 6.5, 10);
+        adicionarTriangulo(0, 2.5, 24, -Math.PI / 1, 6.5, 8);
         
         camera.position.set(0, 60, 80);
         camera.lookAt(0, 0, 0);
