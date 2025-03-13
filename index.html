@@ -46,9 +46,9 @@
         function adicionarTriangulo(bloco, largura) {
             const geometry = new THREE.BufferGeometry();
             const vertices = new Float32Array([
-                0, 2.5, largura / 2,  // Ponto esquerdo
-                5, 2.5, largura / 2,  // Ponto direito
-                2.5, 0, largura / 2   // Ponto inferior (bico para baixo)
+                0, 1.5, largura / 2,  // Ponto esquerdo
+                4, 1.5, largura / 2,  // Ponto direito
+                1.5, 0, largura / 2   // Ponto inferior (bico para baixo)
             ]);
             geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
             
