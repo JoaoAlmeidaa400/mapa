@@ -40,19 +40,19 @@
             bloco.position.set(x, 2.5, z);
             scene.add(bloco);
 
-            // Criar triângulo deitado na superfície cinza
+            // Criar triângulo deitado na base
             const triGeometry = new THREE.Geometry();
             triGeometry.vertices.push(
-                new THREE.Vector3(0, 0, 0),
-                new THREE.Vector3(altura, 0, 0),
-                new THREE.Vector3(altura / 2, 0, -largura / 2)
+                new THREE.Vector3(0, 0, 0), // Vértice na base
+                new THREE.Vector3(altura, 0, 0), // Outro vértice na base
+                new THREE.Vector3(altura / 2, 0, largura) // Ponta oposta
             );
             triGeometry.faces.push(new THREE.Face3(0, 1, 2));
             triGeometry.computeFaceNormals();
 
             const triMaterial = new THREE.MeshBasicMaterial({ color: cor, side: THREE.DoubleSide });
             const triangulo = new THREE.Mesh(triGeometry, triMaterial);
-            triangulo.position.set(x - largura / 2, -1, z);
+            triangulo.position.set(x - largura / 2, 1, z);
             scene.add(triangulo);
         }
 
