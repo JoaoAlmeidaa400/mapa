@@ -15,37 +15,53 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
-        // Luz
+        // Luz ambiente
         const light = new THREE.DirectionalLight(0xffffff, 1);
         light.position.set(5, 10, 5);
         scene.add(light);
 
-        // Função para criar os blocos cortados
-        function criarBloco(x, y, z, cor) {
-            const shape = new THREE.Shape();
-            shape.moveTo(-0.5, -0.5);
-            shape.lineTo(0.5, -0.5);
-            shape.lineTo(0.5, 0.5);
-            shape.lineTo(0.3, 0.7);  // Corte na lateral
-            shape.lineTo(-0.3, 0.7); // Corte na lateral
-            shape.lineTo(-0.5, 0.5);
-            shape.lineTo(-0.5, -0.5);
+        // Criando o chão
+        const floorGeometry = new THREE.BoxGeometry(10, 0.2, 10);
+        const floorMaterial = new THREE.MeshLambertMaterial({ color: 0x808080 });
+        const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+        floor.position.set(0, -0.1, 0);
+        scene.add(floor);
 
-            const extrudeSettings = { depth: 0.5, bevelEnabled: false };
-            const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+        // Criando os blocos (mantendo como estavam antes)
+        function criarBloco(x, y, z, cor) {
+            const geometry = new THREE.BoxGeometry(2, 1, 1);
             const material = new THREE.MeshLambertMaterial({ color: cor });
             const bloco = new THREE.Mesh(geometry, material);
-
             bloco.position.set(x, y, z);
             scene.add(bloco);
         }
 
-        // Criando os blocos conforme sua imagem
-        criarBloco(-1, 0, 0, 0x0000ff); // Azul
-        criarBloco(-1, -1, 0, 0xff0000); // Vermelho
-        criarBloco(-1, -2, 0, 0x00ff00); // Verde
+        // Criando os blocos conforme antes
+        criarBloco(-3, 0.5, 3, 0x0000ff); // Azul
+        criarBloco(-1, 0.5, 3, 0xff0000); // Vermelho
+        criarBloco(1, 0.5, 3, 0x00ff00); // Verde
+        criarBloco(3, 0.5, 3, 0x0000ff); // Azul
 
-        camera.position.z = 5;
+        criarBloco(-3, 0.5, -3, 0x0000ff); // Azul
+        criarBloco(-1, 0.5, -3, 0xff0000); // Vermelho
+        criarBloco(1, 0.5, -3, 0x00ff00); // Verde
+        criarBloco(3, 0.5, -3, 0x0000ff); // Azul
+
+        // Criando a pirâmide no local desejado
+        function criarPiramide(x, y, z, cor) {
+            const geometry = new THREE.ConeGeometry(1, 2, 4);
+            const material = new THREE.MeshLambertMaterial({ color: cor });
+            const piramide = new THREE.Mesh(geometry, material);
+            piramide.position.set(x, y, z);
+            piramide.rotation.y = Math.PI / 4; // Ajustando a rotação para ficar alinhada corretamente
+            scene.add(piramide);
+        }
+
+        // Posicionando a pirâmide conforme a área marcada na imagem
+        criarPiramide(0, 1, -1, 0xffff00); // Amarelo
+
+        camera.position.set(0, 5, 10);
+        camera.lookAt(0, 0, 0);
 
         function animate() {
             requestAnimationFrame(animate);
