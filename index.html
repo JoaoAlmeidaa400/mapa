@@ -54,21 +54,31 @@
         criarBloco(30, 15.5, 0x008000, 20, 11);
         criarBloco(30, 26.5, 0xff0000, 20, 11);
 
-        // Criar um triângulo 3D no centro
-        const triGeometry = new THREE.BufferGeometry();
-        const vertices = new Float32Array([
-            0, 10, 0,   // Vértice superior
-            -5, 0, 5,   // Vértice inferior esquerdo
-            5, 0, 5    // Vértice inferior direito
-        ]);
-        triGeometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
-        triGeometry.setIndex([0, 1, 2]);
-        triGeometry.computeVertexNormals();
+        // Criar um prisma triangular 3D
+        const triGeometry = new THREE.Geometry();
+        triGeometry.vertices.push(
+            new THREE.Vector3(-5, 0, -5), // Base esquerda
+            new THREE.Vector3(5, 0, -5),  // Base direita
+            new THREE.Vector3(0, 10, 0),  // Ponta do triângulo
+            new THREE.Vector3(-5, 0, 5), // Base esquerda traseira
+            new THREE.Vector3(5, 0, 5)  // Base direita traseira
+        );
+
+        triGeometry.faces.push(
+            new THREE.Face3(0, 1, 2), // Frente
+            new THREE.Face3(3, 4, 2), // Trás
+            new THREE.Face3(0, 3, 2), // Lado esquerdo
+            new THREE.Face3(1, 4, 2), // Lado direito
+            new THREE.Face3(0, 1, 4), // Base frente
+            new THREE.Face3(0, 4, 3)  // Base trás
+        );
+
+        triGeometry.computeFaceNormals();
 
         const triMaterial = new THREE.MeshBasicMaterial({ color: 0xffff00, side: THREE.DoubleSide });
-        const triangulo = new THREE.Mesh(triGeometry, triMaterial);
-        triangulo.position.set(0, 5, 0);
-        scene.add(triangulo);
+        const prismaTriangular = new THREE.Mesh(triGeometry, triMaterial);
+        prismaTriangular.position.set(0, 5, 0);
+        scene.add(prismaTriangular);
 
         camera.position.set(0, 60, 80);
         camera.lookAt(0, 0, 0);
