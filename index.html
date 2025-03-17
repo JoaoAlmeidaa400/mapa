@@ -47,7 +47,7 @@
             const vertices = new Float32Array([
                 10, 2.5, largura,
                 10, 2.5, -largura,
-                10 + comprimento, 1.5, 0
+                10 + comprimento, 3, 0
             ]);
             geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
             
@@ -81,7 +81,7 @@
         adicionarTriangulo(-30, 2.5, 23.5);
 
         // Triângulos da direita com comprimento variável
-        adicionarTriangulo(30, 2.5, 26.5, Math.PI / 1, 5.5, 8);
+        adicionarTriangulo(30, 2.5, 26.5, Math.PI / 1, 5.5, 4);
         adicionarTriangulo(30, 2.5, -16, Math.PI / 1, 5.5, 4);
         adicionarTriangulo(0, 2.5, -1, Math.PI / 1, 5.5, 4);
         adicionarTriangulo(0, 2.5, -4, Math.PI / 1, 5.5, 4);
