@@ -93,18 +93,21 @@
         adicionarTriangulo(20, 2.5, -40.5, Math.PI / 1, 5.5, 4);
         adicionarTriangulo(20, 2.5, -49.5, Math.PI / 1, 5.5, 4);
 
-        // Função para adicionar o círculo com "paredes" (tubo oco)
-        function adicionarCirculoVazio(x, y, z, raioInterno = 10, raioExterno = 25, altura = 6, cor = 0xffffff) {
-            const geometria = new THREE.CylinderGeometry(raioExterno, raioExterno, altura, 32);
-            const material = new THREE.MeshBasicMaterial({ color: cor, side: THREE.DoubleSide, wireframe: true });
+        // Função para adicionar o círculo deitado (cilindro)
+        function adicionarCirculoDeitado(x, y, z, raio = 10, altura = 6, cor = 0xffffff) {
+            const geometria = new THREE.CylinderGeometry(raio, raio, altura, 32);
+            const material = new THREE.MeshBasicMaterial({ color: cor });
             const cilindro = new THREE.Mesh(geometria, material);
+
+            // Rotaciona o cilindro para deixá-lo deitado
+            cilindro.rotation.x = Math.PI / 2; 
+
             cilindro.position.set(x, y, z);
-            cilindro.rotation.x = Math.PI / 2;
             scene.add(cilindro);
         }
 
-        // Adicionar o círculo com "paredes" na base
-        adicionarCirculoVazio(20, 2, 42);
+        // Adicionar o círculo deitado (cilindro) na base
+        adicionarCirculoDeitado(20, 2, 42);
 
         camera.position.set(0, 60, 80);
         camera.lookAt(0, 0, 0);
