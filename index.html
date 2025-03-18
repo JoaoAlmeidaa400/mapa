@@ -79,12 +79,10 @@
         adicionarTriangulo(-30, 2.5, -35.5, 0, 5.5, 4);
         adicionarTriangulo(-30, 2.5, -23.5, 0, 6.5, 4);
         adicionarTriangulo(-30, 2.5, -10.5, 0, 6.5, 4);
-         
         adicionarTriangulo(-30, 2.5, 10.5, 0, 6.5, 4);
         adicionarTriangulo(-30, 2.5, 23.5, 0, 6.5, 4);
         adicionarTriangulo(-30, 2.5, 44.5, 0, 5.5, 4);
         adicionarTriangulo(-30, 2.5, 35.5, 0, 5.5, 4);
-        
 
         // Triângulos da direita com comprimento variável
         adicionarTriangulo(20, 2.5, 21.5, Math.PI / 1, 5.5, 4);
@@ -97,14 +95,12 @@
 
         // Função para adicionar o círculo com "paredes" (tubo oco)
         function adicionarCirculoVazio(x, y, z, raioInterno = 10, raioExterno = 25, altura = 6, cor = 0xffffff) {
-           
-            
-            // Posicionar o cilindro
+            const geometria = new THREE.CylinderGeometry(raioExterno, raioExterno, altura, 32);
+            const material = new THREE.MeshBasicMaterial({ color: cor, side: THREE.DoubleSide, wireframe: true });
+            const cilindro = new THREE.Mesh(geometria, material);
             cilindro.position.set(x, y, z);
-            cilindro.rotation.x = Math.PI / 1;
+            cilindro.rotation.x = Math.PI / 2;
             scene.add(cilindro);
-
-        
         }
 
         // Adicionar o círculo com "paredes" na base
