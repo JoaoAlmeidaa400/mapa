@@ -95,18 +95,19 @@
         adicionarTriangulo(20, 2.5, -35.5, Math.PI / 1, 5.5, 4);
         adicionarTriangulo(20, 2.5, -44.5, Math.PI / 1, 5.5, 4);
 
-    function adicionarCirculoVazio(x, y, z, raioInterno = 8, raioExterno = 7, cor = 0xffffff) {
-        const geometry = new THREE.RingGeometry(raioInterno, raioExterno, 44);
-        const material = new THREE.MeshBasicMaterial({ color: cor, side: THREE.DoubleSide });
-        const circulo = new THREE.Mesh(geometry, material);
+function adicionarCirculoVazio(x, y, z, raioInterno = 8, raioExterno = 10, cor = 0xffffff) {
+    const geometry = new THREE.RingGeometry(raioInterno, raioExterno, 64);
+    const material = new THREE.MeshBasicMaterial({ color: cor, side: THREE.DoubleSide });
+    const circulo = new THREE.Mesh(geometry, material);
     
-        circulo.position.set(x, y, z);
-        circulo.rotation.x = -Math.PI / 2; // Para ficar deitado
-        scene.add(circulo);
-        }
+    circulo.position.set(x, y, z);
+    circulo.rotation.x = -Math.PI / 2; // Para ficar deitado
+    scene.add(circulo);
+}
 
-    // Adicionar um círculo vazio na base
-        adicionarCirculoVazio(20, 1, 45);
+// Adicionar um círculo vazio na base
+adicionarCirculoVazio(0, 2.6, 0);
+
 
         
         
