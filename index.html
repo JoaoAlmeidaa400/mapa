@@ -42,23 +42,6 @@
             return bloco;
         }
 
-        function adicionarTriangulo(x, y, z, rotacao = 0, largura = 6.5, comprimento = 5) {
-            const geometry = new THREE.BufferGeometry();
-            const vertices = new Float32Array([
-                10, 2.5, largura,
-                10, 2.5, -largura,
-                10 + comprimento, 2.5, 0
-            ]);
-            geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
-            
-            const material = new THREE.MeshBasicMaterial({ color: 0xffff00, side: THREE.DoubleSide });
-            const triangulo = new THREE.Mesh(geometry, material);
-            
-            triangulo.position.set(x, y, z);
-            triangulo.rotation.y = rotacao;
-            scene.add(triangulo);
-        }
-
         const blocos = [
             criarBloco(-30, -40, 0x0000ff, 20, 20),
             criarBloco(-30, -23.5, 0xff0000, 20, 13),
@@ -74,68 +57,63 @@
             criarBloco(20, 26.5, 0xff0000, 20, 11)
         ];
 
+        function adicionarTriangulo(x, y, z, rotacao = 0, largura = 6.5, comprimento = 5) {
+            const geometry = new THREE.BufferGeometry();
+            const vertices = new Float32Array([
+                0, 0, largura,
+                0, 0, -largura,
+                comprimento, 0, 0
+            ]);
+            geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+            
+            const material = new THREE.MeshBasicMaterial({ color: 0xffff00, side: THREE.DoubleSide });
+            const triangulo = new THREE.Mesh(geometry, material);
+            
+            triangulo.position.set(x, y, z);
+            triangulo.rotation.y = rotacao;
+            scene.add(triangulo);
+        }
+
         // Triângulos da esquerda
-        adicionarTriangulo(-30, 2.5, -44.5, 0, 5.5, 4);
-        adicionarTriangulo(-30, 2.5, -35.5, 0, 5.5, 4);
-        adicionarTriangulo(-30, 2.5, -23.5, 0, 6.5, 4);
-        adicionarTriangulo(-30, 2.5, -10.5, 0, 6.5, 4);
-         
-        adicionarTriangulo(-30, 2.5, 10.5, 0, 6.5, 4);
-        adicionarTriangulo(-30, 2.5, 23.5, 0, 6.5, 4);
-        adicionarTriangulo(-30, 2.5, 44.5, 0, 5.5, 4);
-        adicionarTriangulo(-30, 2.5, 35.5, 0, 5.5, 4);
-        
+        adicionarTriangulo(-30, 3, -44.5, 0, 5.5, 4);
+        adicionarTriangulo(-30, 3, -35.5, 0, 5.5, 4);
+        adicionarTriangulo(-30, 3, -23.5, 0, 6.5, 4);
+        adicionarTriangulo(-30, 3, -10.5, 0, 6.5, 4);
+        adicionarTriangulo(-30, 3, 10.5, 0, 6.5, 4);
+        adicionarTriangulo(-30, 3, 23.5, 0, 6.5, 4);
+        adicionarTriangulo(-30, 3, 44.5, 0, 5.5, 4);
+        adicionarTriangulo(-30, 3, 35.5, 0, 5.5, 4);
 
-        // Triângulos da direita com comprimento variável
-        adicionarTriangulo(20, 2.5, 26.5, Math.PI / 1, 5.5, 4);
-        adicionarTriangulo(20, 2.5, 15.5, Math.PI / 1, 5.5, 4);
-        adicionarTriangulo(20, 2.5, -2.5, Math.PI / 1, 5.5, 4);
-        adicionarTriangulo(20, 2.5, -13.5, Math.PI / 1, 5.5, 4);
-        adicionarTriangulo(20, 2.5, -24.5, Math.PI / 1, 5.5, 4);
-        adicionarTriangulo(20, 2.5, -35.5, Math.PI / 1, 5.5, 4);
-        adicionarTriangulo(20, 2.5, -44.5, Math.PI / 1, 5.5, 4);
+        // Triângulos da direita
+        adicionarTriangulo(20, 3, 26.5, Math.PI, 5.5, 4);
+        adicionarTriangulo(20, 3, 15.5, Math.PI, 5.5, 4);
+        adicionarTriangulo(20, 3, -2.5, Math.PI, 5.5, 4);
+        adicionarTriangulo(20, 3, -13.5, Math.PI, 5.5, 4);
+        adicionarTriangulo(20, 3, -24.5, Math.PI, 5.5, 4);
+        adicionarTriangulo(20, 3, -35.5, Math.PI, 5.5, 4);
+        adicionarTriangulo(20, 3, -44.5, Math.PI, 5.5, 4);
 
-function adicionarCirculoVazado(x, y, z, raioInterno = 8, raioExterno = 10, cor = 0xffffff) {
-    const shape = new THREE.Shape();
+        function adicionarCirculoVazado(x, y, z, raioInterno = 8, raioExterno = 10, cor = 0xffffff) {
+            const shape = new THREE.Shape();
+            shape.absarc(0, 0, raioExterno, 0, Math.PI * 2, false);
+            
+            const buracoPrincipal = new THREE.Path();
+            buracoPrincipal.absarc(0, 0, raioInterno, 0, Math.PI * 2, true);
+            shape.holes.push(buracoPrincipal);
+            
+            const extrudeSettings = { depth: 1, bevelEnabled: false };
+            const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+            
+            const material = new THREE.MeshBasicMaterial({ color: cor, side: THREE.DoubleSide });
+            const circulo = new THREE.Mesh(geometry, material);
+            
+            circulo.position.set(x, y, z);
+            circulo.rotation.x = -Math.PI / 2;
+            scene.add(circulo);
+        }
 
-    // Criar o círculo externo
-    shape.absarc(0, 0, raioExterno, 0, Math.PI * 2, false);
+        adicionarCirculoVazado(0, 2.6, 0);
 
-    // Criar o círculo interno (buraco principal)
-    const buracoPrincipal = new THREE.Path();
-    buracoPrincipal.absarc(0, 0, raioInterno, 0, Math.PI * 2, true);
-    shape.holes.push(buracoPrincipal);
-
-    // Criar os buracos adicionais nos locais específicos
-    const buraco1 = new THREE.Path();
-    buraco1.absarc(-5, 6, 3, 0, Math.PI * 2, true);
-    shape.holes.push(buraco1);
-
-    const buraco2 = new THREE.Path();
-    buraco2.absarc(5, -6, 3, 0, Math.PI * 2, true);
-    shape.holes.push(buraco2);
-
-    // Criar a geometria extrudada para dar espessura
-    const extrudeSettings = { depth: 1, bevelEnabled: false };
-    const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
-    
-    // Criar o material e a malha
-    const material = new THREE.MeshBasicMaterial({ color: cor, side: THREE.DoubleSide });
-    const circulo = new THREE.Mesh(geometry, material);
-
-    // Posicionar e rodar para ficar deitado
-    circulo.position.set(x, y, z);
-    circulo.rotation.x = -Math.PI / 2;
-    scene.add(circulo);
-}
-
-// Adicionar o círculo vazado na cena
-adicionarCirculoVazado(0, 2.6, 0);
-
-
-
-        
-        
         camera.position.set(0, 60, 80);
         camera.lookAt(0, 0, 0);
 
@@ -145,12 +123,6 @@ adicionarCirculoVazado(0, 2.6, 0);
             renderer.render(scene, camera);
         }
         animate();
-
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
     </script>
 </body>
 </html>
