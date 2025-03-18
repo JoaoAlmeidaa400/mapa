@@ -95,7 +95,7 @@
         adicionarTriangulo(20, 2.5, -35.5, Math.PI / 1, 5.5, 4);
         adicionarTriangulo(20, 2.5, -44.5, Math.PI / 1, 5.5, 4);
 
-    function adicionarCirculoVazio(x, y, z, raioInterno = 18, raioExterno = 6, cor = 0xffffff) {
+    function adicionarCirculoVazio(x, y, z, raioInterno = 25, raioExterno = 3, cor = 0xffffff) {
         const geometry = new THREE.RingGeometry(raioInterno, raioExterno, 44);
         const material = new THREE.MeshBasicMaterial({ color: cor, side: THREE.DoubleSide });
         const circulo = new THREE.Mesh(geometry, material);
