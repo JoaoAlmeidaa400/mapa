@@ -27,7 +27,7 @@
         controls.maxDistance = 100;
         controls.maxPolarAngle = Math.PI / 2;
 
-        const baseGeometry = new THREE.BoxGeometry(80, 2, 100);
+        const baseGeometry = new THREE.BoxGeometry(70, 2, 100);
         const baseMaterial = new THREE.MeshBasicMaterial({ color: 0x808080 });
         const base = new THREE.Mesh(baseGeometry, baseMaterial);
         base.position.y = -1;
@@ -95,7 +95,7 @@
         adicionarTriangulo(20, 2.5, -35.5, Math.PI / 1, 5.5, 4);
         adicionarTriangulo(20, 2.5, -44.5, Math.PI / 1, 5.5, 4);
 
-        function adicionarCirculoVazio(x, y, z, raioInterno = 8, raioExterno = 10, cor = 0xffffff) {
+        function adicionarCirculoVazio(x, y, z, raioInterno = 7, raioExterno = 8, cor = 0xffffff) {
     const geometry = new THREE.RingGeometry(raioInterno, raioExterno, 64);
     const material = new THREE.MeshBasicMaterial({ color: cor, side: THREE.DoubleSide });
     const circulo = new THREE.Mesh(geometry, material);
