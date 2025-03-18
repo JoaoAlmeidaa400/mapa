@@ -94,7 +94,7 @@
         adicionarTriangulo(20, 2.5, -49.5, Math.PI / 1, 5.5, 4);
 
         // Função para criar o círculo com buraco
-        function adicionarCirculoComBuraco(x, y, z, raioExterno = 25, raioInterno = 10, altura = 6, cor = 0xffffff) {
+        function adicionarCirculoComBuraco(x, y, z, raioExterno = 8, raioInterno = 10, altura = 6, cor = 0xffffff) {
             const geometria = new THREE.RingGeometry(raioInterno, raioExterno, 32);  // Anel (com buraco)
             const material = new THREE.MeshBasicMaterial({ color: cor, side: THREE.DoubleSide });
             const anel = new THREE.Mesh(geometria, material);
