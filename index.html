@@ -96,7 +96,7 @@
         adicionarTriangulo(20, 2.5, -49.5, Math.PI / 1, 5.5, 4);
 
         // Função para adicionar o círculo com "paredes" (tubo oco)
-        function adicionarCirculoVazio(x, y, z, raioInterno = 15, raioExterno = 20, altura = 6, cor = 0xffffff) {
+        function adicionarCirculoVazio(x, y, z, raioInterno = 18, raioExterno = 25, altura = 6, cor = 0xffffff) {
             // Criar a geometria para o cilindro (com openEnded para deixar o centro vazio)
             const geometry = new THREE.CylinderGeometry(raioExterno, raioExterno, altura, 64, 1, true);
             const material = new THREE.MeshBasicMaterial({ color: cor, side: THREE.BackSide });
@@ -106,6 +106,16 @@
             cilindro.position.set(x, y, z);
             cilindro.rotation.x = Math.PI / 1;
             scene.add(cilindro);
+
+            // Criar a parte interna (buraco) do cilindro
+            const geometryInterno = new THREE.CylinderGeometry(raioInterno, raioInterno, altura, 64, 1, true);
+            const materialInterno = new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.BackSide });
+            const cilindroInterno = new THREE.Mesh(geometryInterno, materialInterno);
+            
+            // Posicionar o cilindro interno
+            cilindroInterno.position.set(x, y, z);
+            cilindroInterno.rotation.x = Math.PI / 1;
+            scene.add(cilindroInterno);
         }
 
         // Adicionar o círculo com "paredes" na base
