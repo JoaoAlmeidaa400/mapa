@@ -93,19 +93,23 @@
         adicionarTriangulo(20, 2.5, -40.5, Math.PI / 1, 5.5, 4);
         adicionarTriangulo(20, 2.5, -49.5, Math.PI / 1, 5.5, 4);
 
-        // Função para criar o círculo com buraco
-        function adicionarCirculoComBuraco(x, y, z, raioExterno = 8, raioInterno = 10, altura = 6, cor = 0xffffff) {
-            const geometria = new THREE.RingGeometry(raioInterno, raioExterno, 32);  // Anel (com buraco)
+        // Função para criar o círculo com camadas e buraco
+        function adicionarCirculoComCamadas(x, y, z, raioExterno = 25, raioInterno = 10, altura = 6, cor = 0xffffff) {
+            // Adiciona camadas no círculo
             const material = new THREE.MeshBasicMaterial({ color: cor, side: THREE.DoubleSide });
-            const anel = new THREE.Mesh(geometria, material);
-
-            anel.rotation.x = Math.PI / 2; // Deitar o anel para que fique paralelo à base
-            anel.position.set(x, y, z);
-            scene.add(anel);
+            
+            for (let i = 0; i < 3; i++) {
+                const raioAtual = raioExterno - i * 5; // Diminuindo o raio para criar camadas
+                const geometria = new THREE.RingGeometry(raioInterno, raioAtual, 32);
+                const anel = new THREE.Mesh(geometria, material);
+                anel.rotation.x = Math.PI / 2; // Deitar o anel para que fique paralelo à base
+                anel.position.set(x, y + i * altura, z); // Posicionando camadas com espaçamento
+                scene.add(anel);
+            }
         }
 
-        // Adicionar o círculo com buraco na base
-        adicionarCirculoComBuraco(20, 2, 42);
+        // Adicionar o círculo com camadas e buraco na base
+        adicionarCirculoComCamadas(20, 2, 42);
 
         camera.position.set(0, 60, 80);
         camera.lookAt(0, 0, 0);
