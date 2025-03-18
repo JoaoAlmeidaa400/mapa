@@ -97,10 +97,7 @@
 
         // Função para adicionar o círculo com "paredes" (tubo oco)
         function adicionarCirculoVazio(x, y, z, raioInterno = 10, raioExterno = 25, altura = 6, cor = 0xffffff) {
-            // Criar a geometria para o cilindro (com openEnded para deixar o centro vazio)
-            const geometry = new THREE.CylinderGeometry(raioExterno, raioExterno, altura, 64, 1, true);
-            const material = new THREE.MeshBasicMaterial({ color: cor, side: THREE.BackSide });
-            const cilindro = new THREE.Mesh(geometry, material);
+           
             
             // Posicionar o cilindro
             cilindro.position.set(x, y, z);
