@@ -66,12 +66,12 @@
             criarBloco(-30, 10.5, 0x008000, 20, 13),
             criarBloco(-30, 23.5, 0xff0000, 20, 13),
             criarBloco(-30, 40, 0x0000ff, 20, 20),
-            criarBloco(20, -40, 0x0000ff, 20, 20),
-            criarBloco(20, -24.5, 0xff0000, 20, 11),
-            criarBloco(20, -13.5, 0x008000, 20, 11),
-            criarBloco(20, -2.5, 0x0000ff, 20, 11),
-            criarBloco(20, 15.5, 0x008000, 20, 11),
-            criarBloco(20, 26.5, 0xff0000, 20, 11)
+            criarBloco(20, -38, 0x0000ff, 20, 20),
+            criarBloco(20, -22.5, 0xff0000, 20, 11),
+            criarBloco(20, -11.5, 0x008000, 20, 11),
+            criarBloco(20, -0.5, 0x0000ff, 20, 11),
+            criarBloco(20, 17.5, 0x008000, 20, 11),
+            criarBloco(20, 28.5, 0xff0000, 20, 11)
         ];
 
         // Triângulos da esquerda
@@ -87,13 +87,13 @@
         
 
         // Triângulos da direita com comprimento variável
-        adicionarTriangulo(20, 2.5, 28.5, Math.PI / 1, 5.5, 4);
-        adicionarTriangulo(20, 2.5, 17.5, Math.PI / 1, 5.5, 4);
-        adicionarTriangulo(20, 2.5, -0.5, Math.PI / 1, 5.5, 4);
-        adicionarTriangulo(20, 2.5, -11.5, Math.PI / 1, 5.5, 4);
-        adicionarTriangulo(20, 2.5, -22.5, Math.PI / 1, 5.5, 4);
-        adicionarTriangulo(20, 2.5, -33.5, Math.PI / 1, 5.5, 4);
-        adicionarTriangulo(20, 2.5, -42.5, Math.PI / 1, 5.5, 4);
+        adicionarTriangulo(20, 2.5, 24.5, Math.PI / 1, 5.5, 4);
+        adicionarTriangulo(20, 2.5, 13.5, Math.PI / 1, 5.5, 4);
+        adicionarTriangulo(20, 2.5, -4.5, Math.PI / 1, 5.5, 4);
+        adicionarTriangulo(20, 2.5, -15.5, Math.PI / 1, 5.5, 4);
+        adicionarTriangulo(20, 2.5, -27.5, Math.PI / 1, 5.5, 4);
+        adicionarTriangulo(20, 2.5, -38.5, Math.PI / 1, 5.5, 4);
+        6adicionarTriangulo(20, 2.5, -46.5, Math.PI / 1, 5.5, 4);
 
         function adicionarCirculoVazio(x, y, z, raioInterno = 7, raioExterno = 8, cor = 0xffffff) {
     const geometry = new THREE.RingGeometry(raioInterno, raioExterno, 64);
