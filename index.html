@@ -93,31 +93,31 @@
         adicionarTriangulo(20, 2.5, -40.5, Math.PI / 1, 5.5, 4);
         adicionarTriangulo(20, 2.5, -49.5, Math.PI / 1, 5.5, 4);
 
-        // Função para adicionar o círculo deitado com buraco
-        function adicionarCirculoComBuraco(x, y, z, raioExterno = 10, raioInterno = 5, altura = 6, corExterno = 0xffffff, corInterno = 0x000000) {
-            // Geometria externa (cilindro completo)
-            const geometriaExterna = new THREE.CylinderGeometry(raioExterno, raioExterno, altura, 32);
-            const materialExterno = new THREE.MeshBasicMaterial({ color: corExterno });
-            const cilindroExterno = new THREE.Mesh(geometriaExterna, materialExterno);
+        // Função para adicionar o círculo com buraco
+        function adicionarCirculoComBuraco(x, y, z, raioExterno = 10, altura = 6, corExterno = 0xffffff, raioBuraco = 4) {
+            // Geometria do cilindro externo
+            const geometria = new THREE.CylinderGeometry(raioExterno, raioExterno, altura, 32);
 
-            // Geometria interna (buraco)
-            const geometriaInterna = new THREE.CylinderGeometry(raioInterno, raioInterno, altura, 32);
-            const materialInterno = new THREE.MeshBasicMaterial({ color: corInterno });
-            const cilindroInterno = new THREE.Mesh(geometriaInterna, materialInterno);
+            // Criar a geometria do buraco (torus)
+            const torusGeometry = new THREE.TorusGeometry(raioBuraco, 1, 16, 100);
+            const torusMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
 
-            // Subtrair o cilindro interno do cilindro externo
-            cilindroInterno.position.set(x, y, z);
-            cilindroExterno.position.set(x, y, z);
+            // Criar o cilindro e o buraco
+            const cilindro = new THREE.Mesh(geometria, new THREE.MeshBasicMaterial({ color: corExterno }));
+            const torus = new THREE.Mesh(torusGeometry, torusMaterial);
 
-            // Rotacionar os cilindros
-            cilindroExterno.rotation.x = Math.PI / 2;
-            cilindroInterno.rotation.x = Math.PI / 2;
+            // Posicionar o torus (buraco) no meio do cilindro
+            torus.position.set(x, y, z);
+            torus.rotation.x = Math.PI / 2; // Torus rotacionado para que o buraco esteja no eixo do cilindro
 
-            scene.add(cilindroExterno);
-            scene.add(cilindroInterno);
+            cilindro.position.set(x, y, z);
+
+            // Adicionar os dois ao cenário
+            scene.add(cilindro);
+            scene.add(torus);
         }
 
-        // Adicionar o círculo com buraco
+        // Adicionar o círculo com buraco (agora com o torus representando o buraco)
         adicionarCirculoComBuraco(20, 2, 42);
 
         camera.position.set(0, 60, 80);
