@@ -107,10 +107,6 @@
             cilindro.rotation.x = Math.PI / 1;
             scene.add(cilindro);
 
-            // Criar a parte interna (buraco) do cilindro
-            const geometryInterno = new THREE.CylinderGeometry(raioInterno, raioInterno, altura, 64, 1, true);
-            const materialInterno = new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.BackSide });
-            const cilindroInterno = new THREE.Mesh(geometryInterno, materialInterno);
             
             // Posicionar o cilindro interno
             cilindroInterno.position.set(x, y, z);
