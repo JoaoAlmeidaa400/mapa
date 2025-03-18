@@ -96,7 +96,7 @@
         adicionarTriangulo(20, 2.5, -49.5, Math.PI / 1, 5.5, 4);
 
         // Função para adicionar o círculo com "paredes"
-        function adicionarCirculoVazio(x, y, z, raioInterno = 7, raioExterno = 8, altura = 8, cor = 0xffffff) {
+        function adicionarCirculoVazio(x, y, z, raioInterno = 7, raioExterno = 8, altura = 7, cor = 0xffffff) {
             // Criar a geometria para o cilindro
             const geometry = new THREE.CylinderGeometry(raioExterno, raioExterno, altura, 64);
             const material = new THREE.MeshBasicMaterial({ color: cor, side: THREE.DoubleSide });
@@ -109,7 +109,7 @@
         }
 
         // Adicionar o círculo com "paredes" na base
-        adicionarCirculoVazio(20, 1, 42);
+        adicionarCirculoVazio(20, 0, 42);
 
         camera.position.set(0, 60, 80);
         camera.lookAt(0, 0, 0);
