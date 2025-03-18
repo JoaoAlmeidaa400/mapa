@@ -95,18 +95,43 @@
         adicionarTriangulo(20, 2.5, -35.5, Math.PI / 1, 5.5, 4);
         adicionarTriangulo(20, 2.5, -44.5, Math.PI / 1, 5.5, 4);
 
-function adicionarCirculoVazio(x, y, z, raioInterno = 8, raioExterno = 10, cor = 0xffffff) {
-    const geometry = new THREE.RingGeometry(raioInterno, raioExterno, 64);
+function adicionarCirculoVazado(x, y, z, raioInterno = 8, raioExterno = 10, cor = 0xffffff) {
+    const shape = new THREE.Shape();
+
+    // Criar o círculo externo
+    shape.absarc(0, 0, raioExterno, 0, Math.PI * 2, false);
+
+    // Criar o círculo interno (buraco principal)
+    const buracoPrincipal = new THREE.Path();
+    buracoPrincipal.absarc(0, 0, raioInterno, 0, Math.PI * 2, true);
+    shape.holes.push(buracoPrincipal);
+
+    // Criar os buracos adicionais nos locais específicos
+    const buraco1 = new THREE.Path();
+    buraco1.absarc(-5, 6, 3, 0, Math.PI * 2, true);
+    shape.holes.push(buraco1);
+
+    const buraco2 = new THREE.Path();
+    buraco2.absarc(5, -6, 3, 0, Math.PI * 2, true);
+    shape.holes.push(buraco2);
+
+    // Criar a geometria extrudada para dar espessura
+    const extrudeSettings = { depth: 1, bevelEnabled: false };
+    const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+    
+    // Criar o material e a malha
     const material = new THREE.MeshBasicMaterial({ color: cor, side: THREE.DoubleSide });
     const circulo = new THREE.Mesh(geometry, material);
-    
+
+    // Posicionar e rodar para ficar deitado
     circulo.position.set(x, y, z);
-    circulo.rotation.x = -Math.PI / 2; // Para ficar deitado
+    circulo.rotation.x = -Math.PI / 2;
     scene.add(circulo);
 }
 
-// Adicionar um círculo vazio na base
-adicionarCirculoVazio(15, 1, 25);
+// Adicionar o círculo vazado na cena
+adicionarCirculoVazado(0, 2.6, 0);
+
 
 
         
