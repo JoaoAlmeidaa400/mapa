@@ -45,9 +45,9 @@
         function adicionarTriangulo(x, y, z, rotacao = 0, largura = 6.5, comprimento = 5) {
             const geometry = new THREE.BufferGeometry();
             const vertices = new Float32Array([ 
-                10, 2.5, largura,
-                10, 2.5, -largura,
-                10 + comprimento, 2.5, 0
+                10, 2.5, largura, 
+                10, 2.5, -largura, 
+                10 + comprimento, 2.5, 0 
             ]);
             geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
             
@@ -83,9 +83,8 @@
         adicionarTriangulo(-30, 2.5, 44.5, 0, 5.5, 4);
         adicionarTriangulo(-30, 2.5, 35.5, 0, 5.5, 4);
 
-        // Função para criar o anel com camada (buraco no meio e espessura lateral)
+        // Função para criar o anel (com buraco no meio e espessura lateral)
         function adicionarAnel3D(x, y, z, raioExterno = 15, raioInterno = 10, altura = 5, cor = 0xff0000) {
-            // Criando o anel com uma espessura lateral
             const geometria = new THREE.CylinderGeometry(raioInterno, raioExterno, altura, 32, 1, true);
             const material = new THREE.MeshBasicMaterial({ color: cor, side: THREE.DoubleSide });
             const anel = new THREE.Mesh(geometria, material);
@@ -94,18 +93,11 @@
             scene.add(anel);
         }
 
-        adicionarAnel3D(20, 2, 42); // Adicionando o anel com camada
+        // Adicionando o anel com camada
+        adicionarAnel3D(20, 2, 42);
 
-        camera.position.set(0, 30, 60);
+        camera.position.set(0, 60, 80);
         camera.lookAt(0, 0, 0);
-
-        // Garantir que o aspecto da câmera seja sempre correto
-        window.addEventListener('resize', () => {
-            const aspectRatio = window.innerWidth / window.innerHeight;
-            camera.aspect = aspectRatio;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
 
         function animate() {
             requestAnimationFrame(animate);
@@ -113,6 +105,13 @@
             renderer.render(scene, camera);
         }
         animate();
+
+        window.addEventListener('resize', () => {
+            const aspectRatio = window.innerWidth / window.innerHeight;
+            camera.aspect = aspectRatio;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
     </script>
 </body>
 </html>
