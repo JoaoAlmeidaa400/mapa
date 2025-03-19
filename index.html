@@ -83,7 +83,6 @@
         adicionarTriangulo(-30, 2.5, 44.5, 0, 5.5, 4);
         adicionarTriangulo(-30, 2.5, 35.5, 0, 5.5, 4);
 
-
         // Triângulos da direita com comprimento variável
         adicionarTriangulo(20, 2.5, 21.5, Math.PI / 1, 5.5, 4);
         adicionarTriangulo(20, 2.5, 10.5, Math.PI / 1, 5.5, 4);
@@ -92,36 +91,28 @@
         adicionarTriangulo(20, 2.5, -29.5, Math.PI / 1, 5.5, 4);
         adicionarTriangulo(20, 2.5, -40.5, Math.PI / 1, 5.5, 4);
         adicionarTriangulo(20, 2.5, -49.5, Math.PI / 1, 5.5, 4);
-        
 
         // Função para criar o anel com um buraco no meio
-        function adicionarCirculoComAbertura(x, y, z, raioExterno = 15, raioInterno = 8, altura = 5, cor = 0xff0000) {
-            // Círculo com buraco
-            const geometriaExterna = new THREE.CylinderGeometry(raioExterno, raioExterno, altura, 32);
-            const geometriaInterna = new THREE.CylinderGeometry(raioInterno, raioInterno, altura, 32);
+        function adicionarCirculoComAbertura(x, y, z, raioExterno = 15, raioInterno = 8, altura = 0.1, cor = 0xff0000) {
+            // Geometria do anel
+            const geometriaAnel = new THREE.RingGeometry(raioInterno, raioExterno, 32);
 
             // Material do anel
             const material = new THREE.MeshBasicMaterial({ color: cor, side: THREE.DoubleSide });
 
-            // Criando as geometrias
-            const anelExterno = new THREE.Mesh(geometriaExterna, material);
-            const anelInterno = new THREE.Mesh(geometriaInterna, material);
+            // Criando o anel
+            const anel = new THREE.Mesh(geometriaAnel, material);
 
             // Posicionando e ajustando a rotação do anel
-            anelExterno.position.set(x, y, z);
-            anelInterno.position.set(x, y, z);
-
-            // Definindo a rotação para posicionar corretamente
-            anelExterno.rotation.x = Math.PI / 2;
-            anelInterno.rotation.x = Math.PI / 2;
+            anel.position.set(x, y, z);
+            anel.rotation.x = Math.PI / 2; // Rotaciona para ficar na horizontal
 
             // Adicionando o anel ao cenário
-            scene.add(anelExterno);
-            scene.add(anelInterno);
+            scene.add(anel);
         }
 
         // Adicionando o círculo com abertura
-        adicionarCirculoComAbertura(20, 2, 42);
+        adicionarCirculoComAbertura(20, 2.5, 42);
 
         camera.position.set(0, 60, 80);
         camera.lookAt(0, 0, 0);
