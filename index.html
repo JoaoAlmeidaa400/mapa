@@ -44,16 +44,16 @@
 
         function adicionarTriangulo(x, y, z, rotacao = 0, largura = 6.5, comprimento = 5) {
             const geometry = new THREE.BufferGeometry();
-            const vertices = new Float32Array([
+            const vertices = new Float32Array([ 
                 10, 2.5, largura,
                 10, 2.5, -largura,
                 10 + comprimento, 2.5, 0
             ]);
             geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
-            
+
             const material = new THREE.MeshBasicMaterial({ color: 0xffff00, side: THREE.DoubleSide });
             const triangulo = new THREE.Mesh(geometry, material);
-            
+
             triangulo.position.set(x, y, z);
             triangulo.rotation.y = rotacao;
             scene.add(triangulo);
@@ -83,21 +83,24 @@
         adicionarTriangulo(-30, 2.5, 44.5, 0, 5.5, 4);
         adicionarTriangulo(-30, 2.5, 35.5, 0, 5.5, 4);
 
+        // Função modificada para criar o anel com buraco no meio
         function adicionarAnel3D(x, y, z, raioExterno = 25, raioInterno = 10, altura = 5, cor = 0xffffff) {
-            const geometria = new THREE.CylinderGeometry(raioInterno, raioInterno, altura, 32, 1, true);
-            const material = new THREE.MeshBasicMaterial({ color: cor, side: THREE.DoubleSide });
-            const anelInterno = new THREE.Mesh(geometria, material);
-            anelInterno.position.set(x, y - altura / 2, z);
-            scene.add(anelInterno);
-
-            const geometriaExterna = new THREE.CylinderGeometry(raioExterno, raioExterno, altura, 32);
+            // Geometria do anel (parte externa)
+            const geometriaExterna = new THREE.CylinderGeometry(raioExterno, raioExterno, altura, 32, 1);
             const materialExterno = new THREE.MeshBasicMaterial({ color: cor });
             const anelExterno = new THREE.Mesh(geometriaExterna, materialExterno);
             anelExterno.position.set(x, y - altura / 2, z);
             scene.add(anelExterno);
+
+            // Geometria do buraco (parte interna)
+            const geometriaInterna = new THREE.CylinderGeometry(raioInterno, raioInterno, altura + 2, 32, 1, true);  // altura um pouco maior para garantir que o buraco se estenda
+            const materialInterno = new THREE.MeshBasicMaterial({ color: 0x808080, side: THREE.DoubleSide });
+            const anelInterno = new THREE.Mesh(geometriaInterna, materialInterno);
+            anelInterno.position.set(x, y - altura / 2, z);
+            scene.add(anelInterno);
         }
 
-        adicionarAnel3D(20, 2, 42);
+        adicionarAnel3D(20, 2, 42); // Chamando a função para adicionar o anel com buraco
 
         camera.position.set(0, 60, 80);
         camera.lookAt(0, 0, 0);
