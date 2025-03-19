@@ -99,18 +99,20 @@
         camera.position.set(0, 30, 60);
         camera.lookAt(0, 0, 0);
 
+        // Garantir que o aspecto da câmera seja sempre correto
+        window.addEventListener('resize', () => {
+            const aspectRatio = window.innerWidth / window.innerHeight;
+            camera.aspect = aspectRatio;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
         function animate() {
             requestAnimationFrame(animate);
             controls.update();
             renderer.render(scene, camera);
         }
         animate();
-
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
     </script>
 </body>
 </html>
