@@ -95,7 +95,16 @@
         // Função para criar um cilindro oco (com buraco no meio)
         function adicionarCilindroOco(x, y, z, raioExterno = 15, raioInterno = 8, altura = 5, cor = 0xff0000) {
             // Geometria do cilindro oco
-            const geometriaCilindro = new THREE.CylinderGeometry(raioExterno, raioExterno, altura, 32, 1, false, 0, Math.PI * 2);
+            const geometriaCilindro = new THREE.CylinderGeometry(
+                raioExterno, // raio superior externo
+                raioExterno, // raio inferior externo
+                altura,      // altura
+                32,          // segmentos radiais
+                1,           // segmentos de altura
+                false,       // openEnded
+                0,           // ângulo inicial
+                Math.PI * 2  // ângulo final
+            );
 
             // Criando o cilindro oco
             const material = new THREE.MeshBasicMaterial({ color: cor, side: THREE.DoubleSide });
