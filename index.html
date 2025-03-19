@@ -44,7 +44,7 @@
 
         function adicionarTriangulo(x, y, z, rotacao = 0, largura = 6.5, comprimento = 5) {
             const geometry = new THREE.BufferGeometry();
-            const vertices = new Float32Array([
+            const vertices = new Float32Array([ 
                 10, 2.5, largura,
                 10, 2.5, -largura,
                 10 + comprimento, 2.5, 0
@@ -83,25 +83,29 @@
         adicionarTriangulo(-30, 2.5, 44.5, 0, 5.5, 4);
         adicionarTriangulo(-30, 2.5, 35.5, 0, 5.5, 4);
 
-    function adicionarAnel3D(x, y, z, raioExterno = 15, raioInterno = 7, altura = 5, cor = 0xffffff) {
-        const geometria = new THREE.TorusGeometry(raioExterno, raioInterno, 16, 100);
-        const material = new THREE.MeshBasicMaterial({ color: cor, side: THREE.DoubleSide });
-        const anel = new THREE.Mesh(geometria, material);
-        anel.position.set(x, y, z);
-        scene.add(anel);
-    }
-
-            const geometriaExterna = new THREE.CylinderGeometry(raioExterno, raioExterno, altura, 32);
-            const materialExterno = new THREE.MeshBasicMaterial({ color: cor });
-            const anelExterno = new THREE.Mesh(geometriaExterna, materialExterno);
-            anelExterno.position.set(x, y - altura / 2, z);
-            scene.add(anelExterno);
+        // Função modificada para criar o anel
+        function adicionarAnel3D(x, y, z, raioExterno = 15, raioInterno = 5, altura = 5, cor = 0xffffff) {
+            const geometria = new THREE.TorusGeometry(raioExterno, raioInterno, 16, 100); // Usando TorusGeometry
+            const material = new THREE.MeshStandardMaterial({ color: cor });
+            const anel = new THREE.Mesh(geometria, material);
+            anel.position.set(x, y, z);
+            scene.add(anel);
         }
 
         adicionarAnel3D(20, 2, 42);
 
-        camera.position.set(0, 60, 80);
+        // Câmera posicionada para ver a cena
+        camera.position.set(0, 30, 60);
         camera.lookAt(0, 0, 0);
+
+        // Adicionando luz para iluminar a cena
+        const luz = new THREE.DirectionalLight(0xffffff, 1);
+        luz.position.set(10, 10, 10).normalize();
+        scene.add(luz);
+
+        // Luz ambiente
+        const luzAmbiente = new THREE.AmbientLight(0x404040); // Luz suave branca
+        scene.add(luzAmbiente);
 
         function animate() {
             requestAnimationFrame(animate);
