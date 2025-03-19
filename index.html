@@ -83,16 +83,18 @@
         adicionarTriangulo(-30, 2.5, 44.5, 0, 5.5, 4);
         adicionarTriangulo(-30, 2.5, 35.5, 0, 5.5, 4);
 
-        // Função modificada para criar o anel (circulo com buraco no meio)
-        function adicionarAnel3D(x, y, z, raioExterno = 15, raioInterno = 5, altura = 1, cor = 0xff0000) {
-            const geometria = new THREE.RingGeometry(raioInterno, raioExterno, 32); // Usando RingGeometry
+        // Função modificada para criar o anel com maior espessura lateral
+        function adicionarAnel3D(x, y, z, raioExterno = 15, raioInterno = 8, altura = 10, cor = 0xff0000) {
+            // Aumentando a altura para dar mais espessura lateral
+            const geometria = new THREE.RingGeometry(raioInterno, raioExterno, 32); // Mantendo o tamanho do buraco
             const material = new THREE.MeshBasicMaterial({ color: cor, side: THREE.DoubleSide });
             const anel = new THREE.Mesh(geometria, material);
+            anel.rotation.x = Math.PI / 2; // Rotacionando para que o anel fique na horizontal
             anel.position.set(x, y, z);
             scene.add(anel);
         }
 
-        adicionarAnel3D(20, 2, 42); // Adicionando o anel
+        adicionarAnel3D(20, 2, 42); // Adicionando o anel com espessura lateral maior
 
         camera.position.set(0, 30, 60);
         camera.lookAt(0, 0, 0);
