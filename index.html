@@ -10,6 +10,8 @@
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three/examples/js/controls/OrbitControls.js"></script>
+    <!-- Carregar ThreeCSG para operações de subtração -->
+    <script src="https://rawgit.com/evanw/three-csg.js/master/three-csg.js"></script>
 </head>
 <body>
     <script>
@@ -83,24 +85,31 @@
         adicionarTriangulo(-30, 2.5, 44.5, 0, 5.5, 4);
         adicionarTriangulo(-30, 2.5, 35.5, 0, 5.5, 4);
 
-        // Função modificada para criar o anel com buraco no meio
-        function adicionarAnel3D(x, y, z, raioExterno = 25, raioInterno = 10, altura = 5, cor = 0xffffff) {
-            // Geometria do anel (parte externa)
+        // Função para criar o anel com buraco utilizando subtração
+        function adicionarAnelComBuraco(x, y, z, raioExterno = 25, raioInterno = 10, altura = 5, cor = 0xffffff) {
+            // Criando a geometria do anel (cilindro externo)
             const geometriaExterna = new THREE.CylinderGeometry(raioExterno, raioExterno, altura, 32, 1);
             const materialExterno = new THREE.MeshBasicMaterial({ color: cor });
             const anelExterno = new THREE.Mesh(geometriaExterna, materialExterno);
             anelExterno.position.set(x, y - altura / 2, z);
-            scene.add(anelExterno);
 
-            // Geometria do buraco (parte interna)
-            const geometriaInterna = new THREE.CylinderGeometry(raioInterno, raioInterno, altura + 2, 32, 1, true);  // altura um pouco maior para garantir que o buraco se estenda
+            // Criando a geometria do buraco (cilindro interno)
+            const geometriaInterna = new THREE.CylinderGeometry(raioInterno, raioInterno, altura + 2, 32, 1);
             const materialInterno = new THREE.MeshBasicMaterial({ color: 0x808080, side: THREE.DoubleSide });
             const anelInterno = new THREE.Mesh(geometriaInterna, materialInterno);
             anelInterno.position.set(x, y - altura / 2, z);
-            scene.add(anelInterno);
+
+            // Usando CSG para subtrair o cilindro interno do cilindro externo
+            const csgExterno = new ThreeCSG().fromMesh(anelExterno);
+            const csgInterno = new ThreeCSG().fromMesh(anelInterno);
+            const csgFinal = csgExterno.subtract(csgInterno);
+
+            // Adicionando a geometria final à cena
+            const resultado = csgFinal.toMesh();
+            scene.add(resultado);
         }
 
-        adicionarAnel3D(20, 2, 42); // Chamando a função para adicionar o anel com buraco
+        adicionarAnelComBuraco(20, 2, 42); // Chamando a função para criar o anel com buraco
 
         camera.position.set(0, 60, 80);
         camera.lookAt(0, 0, 0);
@@ -120,3 +129,4 @@
     </script>
 </body>
 </html>
+
