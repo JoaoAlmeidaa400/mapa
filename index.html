@@ -83,7 +83,7 @@
         adicionarTriangulo(-30, 2.5, 44.5, 0, 5.5, 4);
         adicionarTriangulo(-30, 2.5, 35.5, 0, 5.5, 4);
 
-        function adicionarAnel3D(x, y, z, raioExterno = 9, raioInterno = 8, altura = 5, cor = 0xffffff) {
+        function adicionarAnel3D(x, y, z, raioExterno = 9, raioInterno = 5, altura = 5, cor = 0xffffff) {
             const geometria = new THREE.CylinderGeometry(raioInterno, raioInterno, altura, 32, 1, true);
             const material = new THREE.MeshBasicMaterial({ color: cor, side: THREE.DoubleSide });
             const anelInterno = new THREE.Mesh(geometria, material);
