@@ -92,28 +92,24 @@
         adicionarTriangulo(20, 2.5, -40.5, Math.PI / 1, 5.5, 4);
         adicionarTriangulo(20, 2.5, -49.5, Math.PI / 1, 5.5, 4);
 
-        // Função para criar um cilindro vazado (com buraco no meio)
-        function adicionarCilindroVazado(x, y, z, raioExterno = 15, raioInterno = 8, altura = 5, cor = 0xff0000) {
-            // Geometria do cilindro vazado
-            const geometriaCilindro = new THREE.CylinderGeometry(raioExterno, raioExterno, altura, 32, 1, true, 0, Math.PI * 2);
-            const geometriaBuraco = new THREE.CylinderGeometry(raioInterno, raioInterno, altura, 32, 1, true, 0, Math.PI * 2);
+        // Função para criar um cilindro oco (com buraco no meio)
+        function adicionarCilindroOco(x, y, z, raioExterno = 15, raioInterno = 8, altura = 5, cor = 0xff0000) {
+            // Geometria do cilindro oco
+            const geometriaCilindro = new THREE.CylinderGeometry(raioExterno, raioExterno, altura, 32, 1, false, 0, Math.PI * 2);
 
-            // Criando o cilindro vazado
+            // Criando o cilindro oco
             const material = new THREE.MeshBasicMaterial({ color: cor, side: THREE.DoubleSide });
             const cilindro = new THREE.Mesh(geometriaCilindro, material);
-            const buraco = new THREE.Mesh(geometriaBuraco, material);
 
             // Posicionando e ajustando a rotação
             cilindro.position.set(x, y, z);
-            buraco.position.set(x, y, z);
 
             // Adicionando ao cenário
             scene.add(cilindro);
-            scene.add(buraco);
         }
 
-        // Adicionando o cilindro vazado
-        adicionarCilindroVazado(20, 2.5, 42);
+        // Adicionando o cilindro oco
+        adicionarCilindroOco(20, 2.5, 42);
 
         camera.position.set(0, 60, 80);
         camera.lookAt(0, 0, 0);
