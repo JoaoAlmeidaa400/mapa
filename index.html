@@ -84,7 +84,7 @@
         adicionarTriangulo(-30, 2.5, 35.5, 0, 5.5, 4);
 
         // Função para criar um anel com uma abertura no meio
-        function adicionarCirculoComAbertura(x, y, z, raioExterno = 15, raioInterno = 10, altura = 5, cor = 0xff0000) {
+        function adicionarCirculoComAbertura(x, y, z, raioExterno = 15, raioInterno = 26, altura = 5, cor = 0xff0000) {
             // Círculo com buraco central
             const geometria = new THREE.CylinderGeometry(raioExterno, raioExterno, altura, 32, 1, false, 0, Math.PI * 2);
             const geometriaInterna = new THREE.CylinderGeometry(raioInterno, raioInterno, altura, 32, 1, false, 0, Math.PI * 2);
