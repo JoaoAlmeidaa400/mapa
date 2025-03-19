@@ -27,23 +27,15 @@
         controls.maxDistance = 100;
         controls.maxPolarAngle = Math.PI / 2;
 
-        // Adicionando luz para iluminar os objetos
-        const luzAmbiente = new THREE.AmbientLight(0x404040, 1); // Luz ambiente suave
-        scene.add(luzAmbiente);
-
-        const luzDirecional = new THREE.DirectionalLight(0xffffff, 1); // Luz direcional mais forte
-        luzDirecional.position.set(10, 10, 10);
-        scene.add(luzDirecional);
-
         const baseGeometry = new THREE.BoxGeometry(80, 2, 110);
-        const baseMaterial = new THREE.MeshStandardMaterial({ color: 0x808080 });
+        const baseMaterial = new THREE.MeshBasicMaterial({ color: 0x808080 });
         const base = new THREE.Mesh(baseGeometry, baseMaterial);
         base.position.y = -1;
         scene.add(base);
 
         function criarBloco(x, z, cor, largura = 20, altura = 20) {
             const geometry = new THREE.BoxGeometry(largura, 5, altura);
-            const material = new THREE.MeshStandardMaterial({ color: cor });
+            const material = new THREE.MeshBasicMaterial({ color: cor });
             const bloco = new THREE.Mesh(geometry, material);
             bloco.position.set(x, 2.5, z);
             scene.add(bloco);
@@ -52,16 +44,16 @@
 
         function adicionarTriangulo(x, y, z, rotacao = 0, largura = 6.5, comprimento = 5) {
             const geometry = new THREE.BufferGeometry();
-            const vertices = new Float32Array([ 
+            const vertices = new Float32Array([
                 10, 2.5, largura,
                 10, 2.5, -largura,
                 10 + comprimento, 2.5, 0
             ]);
             geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
-
-            const material = new THREE.MeshStandardMaterial({ color: 0xffff00, side: THREE.DoubleSide });
+            
+            const material = new THREE.MeshBasicMaterial({ color: 0xffff00, side: THREE.DoubleSide });
             const triangulo = new THREE.Mesh(geometry, material);
-
+            
             triangulo.position.set(x, y, z);
             triangulo.rotation.y = rotacao;
             scene.add(triangulo);
@@ -91,31 +83,37 @@
         adicionarTriangulo(-30, 2.5, 44.5, 0, 5.5, 4);
         adicionarTriangulo(-30, 2.5, 35.5, 0, 5.5, 4);
 
-        // Função para criar o anel com buraco
-        function adicionarAnelComBuraco(x, y, z, raioExterno = 25, raioInterno = 10, altura = 5, cor = 0xffffff) {
-            // Criando a geometria do anel (cilindro externo)
-            const geometriaExterna = new THREE.CylinderGeometry(raioExterno, raioExterno, altura, 32, 1);
-            const materialExterno = new THREE.MeshStandardMaterial({ color: cor });
+        function adicionarAnel3D(x, y, z, raioExterno = 25, raioInterno = 10, altura = 5, cor = 0xffffff) {
+            const geometria = new THREE.CylinderGeometry(raioInterno, raioInterno, altura, 32, 1, true);
+            const material = new THREE.MeshBasicMaterial({ color: cor, side: THREE.DoubleSide });
+            const anelInterno = new THREE.Mesh(geometria, material);
+            anelInterno.position.set(x, y - altura / 2, z);
+            scene.add(anelInterno);
+
+            const geometriaExterna = new THREE.CylinderGeometry(raioExterno, raioExterno, altura, 32);
+            const materialExterno = new THREE.MeshBasicMaterial({ color: cor });
             const anelExterno = new THREE.Mesh(geometriaExterna, materialExterno);
             anelExterno.position.set(x, y - altura / 2, z);
-
-            // Criando a geometria do buraco (cilindro interno)
-            const geometriaInterna = new THREE.CylinderGeometry(raioInterno, raioInterno, altura + 2, 32, 1);
-            const materialInterno = new THREE.MeshStandardMaterial({ color: 0x808080 });
-            const anelInterno = new THREE.Mesh(geometriaInterna, materialInterno);
-            anelInterno.position.set(x, y - altura / 2, z);
-
-            // Subtração do cilindro interno do cilindro externo manualmente
-            // (no THREE.js, não temos CSG nativamente, então isso é uma simplificação)
-
-            // Adiciona o anel externo e o interno à cena
             scene.add(anelExterno);
-            scene.add(anelInterno);
         }
 
-        adicionarAnelComBuraco(20, 2, 42); // Chamando a função para criar o anel com buraco
+        adicionarAnel3D(20, 2, 42);
 
         camera.position.set(0, 60, 80);
         camera.lookAt(0, 0, 0);
 
-   
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>
