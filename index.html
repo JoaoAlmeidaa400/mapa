@@ -10,7 +10,6 @@
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three/examples/js/controls/OrbitControls.js"></script>
-    <script src="https://rawgit.com/evanw/three-csg.js/master/three-csg.js"></script>
 </head>
 <body>
     <script>
@@ -92,7 +91,7 @@
         adicionarTriangulo(-30, 2.5, 44.5, 0, 5.5, 4);
         adicionarTriangulo(-30, 2.5, 35.5, 0, 5.5, 4);
 
-        // Função para criar o anel com buraco utilizando subtração
+        // Função para criar o anel com buraco
         function adicionarAnelComBuraco(x, y, z, raioExterno = 25, raioInterno = 10, altura = 5, cor = 0xffffff) {
             // Criando a geometria do anel (cilindro externo)
             const geometriaExterna = new THREE.CylinderGeometry(raioExterno, raioExterno, altura, 32, 1);
@@ -106,14 +105,12 @@
             const anelInterno = new THREE.Mesh(geometriaInterna, materialInterno);
             anelInterno.position.set(x, y - altura / 2, z);
 
-            // Usando CSG para subtrair o cilindro interno do cilindro externo
-            const csgExterno = new ThreeCSG().fromMesh(anelExterno);
-            const csgInterno = new ThreeCSG().fromMesh(anelInterno);
-            const csgFinal = csgExterno.subtract(csgInterno);
+            // Subtração do cilindro interno do cilindro externo manualmente
+            // (no THREE.js, não temos CSG nativamente, então isso é uma simplificação)
 
-            // Adicionando a geometria final à cena
-            const resultado = csgFinal.toMesh();
-            scene.add(resultado);
+            // Adiciona o anel externo e o interno à cena
+            scene.add(anelExterno);
+            scene.add(anelInterno);
         }
 
         adicionarAnelComBuraco(20, 2, 42); // Chamando a função para criar o anel com buraco
@@ -121,18 +118,4 @@
         camera.position.set(0, 60, 80);
         camera.lookAt(0, 0, 0);
 
-        function animate() {
-            requestAnimationFrame(animate);
-            controls.update();
-            renderer.render(scene, camera);
-        }
-        animate();
-
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-    </script>
-</body>
-</html>
+   
