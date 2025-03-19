@@ -10,7 +10,6 @@
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three/examples/js/controls/OrbitControls.js"></script>
-    <!-- Carregar ThreeCSG para operações de subtração -->
     <script src="https://rawgit.com/evanw/three-csg.js/master/three-csg.js"></script>
 </head>
 <body>
@@ -29,15 +28,23 @@
         controls.maxDistance = 100;
         controls.maxPolarAngle = Math.PI / 2;
 
+        // Adicionando luz para iluminar os objetos
+        const luzAmbiente = new THREE.AmbientLight(0x404040, 1); // Luz ambiente suave
+        scene.add(luzAmbiente);
+
+        const luzDirecional = new THREE.DirectionalLight(0xffffff, 1); // Luz direcional mais forte
+        luzDirecional.position.set(10, 10, 10);
+        scene.add(luzDirecional);
+
         const baseGeometry = new THREE.BoxGeometry(80, 2, 110);
-        const baseMaterial = new THREE.MeshBasicMaterial({ color: 0x808080 });
+        const baseMaterial = new THREE.MeshStandardMaterial({ color: 0x808080 });
         const base = new THREE.Mesh(baseGeometry, baseMaterial);
         base.position.y = -1;
         scene.add(base);
 
         function criarBloco(x, z, cor, largura = 20, altura = 20) {
             const geometry = new THREE.BoxGeometry(largura, 5, altura);
-            const material = new THREE.MeshBasicMaterial({ color: cor });
+            const material = new THREE.MeshStandardMaterial({ color: cor });
             const bloco = new THREE.Mesh(geometry, material);
             bloco.position.set(x, 2.5, z);
             scene.add(bloco);
@@ -53,7 +60,7 @@
             ]);
             geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
 
-            const material = new THREE.MeshBasicMaterial({ color: 0xffff00, side: THREE.DoubleSide });
+            const material = new THREE.MeshStandardMaterial({ color: 0xffff00, side: THREE.DoubleSide });
             const triangulo = new THREE.Mesh(geometry, material);
 
             triangulo.position.set(x, y, z);
@@ -89,13 +96,13 @@
         function adicionarAnelComBuraco(x, y, z, raioExterno = 25, raioInterno = 10, altura = 5, cor = 0xffffff) {
             // Criando a geometria do anel (cilindro externo)
             const geometriaExterna = new THREE.CylinderGeometry(raioExterno, raioExterno, altura, 32, 1);
-            const materialExterno = new THREE.MeshBasicMaterial({ color: cor });
+            const materialExterno = new THREE.MeshStandardMaterial({ color: cor });
             const anelExterno = new THREE.Mesh(geometriaExterna, materialExterno);
             anelExterno.position.set(x, y - altura / 2, z);
 
             // Criando a geometria do buraco (cilindro interno)
             const geometriaInterna = new THREE.CylinderGeometry(raioInterno, raioInterno, altura + 2, 32, 1);
-            const materialInterno = new THREE.MeshBasicMaterial({ color: 0x808080, side: THREE.DoubleSide });
+            const materialInterno = new THREE.MeshStandardMaterial({ color: 0x808080 });
             const anelInterno = new THREE.Mesh(geometriaInterna, materialInterno);
             anelInterno.position.set(x, y - altura / 2, z);
 
@@ -129,4 +136,3 @@
     </script>
 </body>
 </html>
-
