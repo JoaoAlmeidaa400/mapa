@@ -92,8 +92,8 @@
         adicionarTriangulo(20, 2.5, -40.5, Math.PI / 1, 5.5, 4);
         adicionarTriangulo(20, 2.5, -49.5, Math.PI / 1, 5.5, 4);
 
-        // Função para criar o anel com um buraco no meio e uma camada rígida abaixo
-        function adicionarCirculoComCamadaRigida(x, y, z, raioExterno = 15, raioInterno = 8, alturaCamada = 1, corAnel = 0xff0000, corCamada = 0x808080) {
+        // Função para criar o anel com uma camada cilíndrica abaixo
+        function adicionarCirculoComCamadaCilindrica(x, y, z, raioExterno = 15, raioInterno = 8, alturaCamada = 5, corAnel = 0xff0000, corCamada = 0x808080) {
             // Geometria do anel
             const geometriaAnel = new THREE.RingGeometry(raioInterno, raioExterno, 32);
             const materialAnel = new THREE.MeshBasicMaterial({ color: corAnel, side: THREE.DoubleSide });
@@ -102,17 +102,16 @@
             anel.rotation.x = Math.PI / 2; // Rotaciona para ficar na horizontal
             scene.add(anel);
 
-            // Geometria da camada rígida (um disco sólido)
-            const geometriaCamada = new THREE.CircleGeometry(raioExterno, 32);
-            const materialCamada = new THREE.MeshBasicMaterial({ color: corCamada, side: THREE.DoubleSide });
+            // Geometria da camada cilíndrica
+            const geometriaCamada = new THREE.CylinderGeometry(raioExterno, raioExterno, alturaCamada, 32);
+            const materialCamada = new THREE.MeshBasicMaterial({ color: corCamada });
             const camada = new THREE.Mesh(geometriaCamada, materialCamada);
             camada.position.set(x, y - alturaCamada / 2, z); // Posiciona abaixo do anel
-            camada.rotation.x = Math.PI / 2; // Rotaciona para ficar na horizontal
             scene.add(camada);
         }
 
-        // Adicionando o círculo com abertura e camada rígida
-        adicionarCirculoComCamadaRigida(20, 2.5, 42);
+        // Adicionando o círculo com abertura e camada cilíndrica
+        adicionarCirculoComCamadaCilindrica(20, 2.5, 42);
 
         camera.position.set(0, 60, 80);
         camera.lookAt(0, 0, 0);
