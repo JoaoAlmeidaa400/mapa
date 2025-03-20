@@ -120,6 +120,21 @@
         // Adicionando o cilindro oco
         adicionarCilindroOco(20, 2.5, 42);
 
+
+        function adicionarCilindroOco(x, y, z, raioExterno = 15, raioInterno = 8, altura = 5, cor = 0xff0000) {
+    const geometry = new THREE.TorusGeometry((raioExterno + raioInterno) / 2, (raioExterno - raioInterno) / 2, 16, 50);
+    const material = new THREE.MeshBasicMaterial({ color: cor });
+    const cilindroOco = new THREE.Mesh(geometry, material);
+
+    cilindroOco.rotation.x = Math.PI / 1; // Para ficar de pé como um cilindro
+    cilindroOco.position.set(x, y, z);
+
+    scene.add(cilindroOco);
+}
+
+// Adicionando o cilindro oco
+adicionarCilindroOco(20, 2.5, 42);
+
         camera.position.set(0, 60, 80);
         camera.lookAt(0, 0, 0);
 
